@@ -123,13 +123,7 @@ export default async function ProjectPage({
                 <h1 className="text-2xl font-bold text-gray-900">
                   {project.title}
                 </h1>
-                <span className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-700">
-                  {project.status === "DRAFT"
-                    ? "준비 중"
-                    : project.status === "PUBLISHED"
-                    ? "공개"
-                    : "완료"}
-                </span>
+                
               </div>
               <p className="text-xs text-gray-500">
                 {project.organizer.name} 님이 준비했어요
