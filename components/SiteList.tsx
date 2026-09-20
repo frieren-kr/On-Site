@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useOptimistic } from "react";
 import { deleteSite, reorderSite } from "@/app/projects/[id]/actions";
 import Link from "next/link";
 
@@ -25,8 +25,24 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
   const [isPending, startTransition] = useTransition();
   const [pendingId, setPendingId] = useState<string | null>(null);
 
+  // 순서 변경 낙관적 상태. 서버가 revalidate로 새 sites를 내려주면 자동으로 이 값에 다시 맞춰지고,
+  // 서버 액션이 에러/실패로 끝나면 transition 종료와 함께 sites(원래 순서)로 되돌아간다.
+  const [optimisticSites, applyOptimisticReorder] = useOptimistic(
+    sites,
+    (current: Site[], action: { siteId: string; direction: "up" | "down" }) => {
+      const index = current.findIndex((s) => s.id === action.siteId);
+      if (index === -1) return current;
+      const swapWith = action.direction === "up" ? index - 1 : index + 1;
+      if (swapWith < 0 || swapWith >= current.length) return current;
+
+      const next = [...current];
+      [next[index], next[swapWith]] = [next[swapWith], next[index]];
+      return next;
+    }
+  );
+
   function handleDelete(siteId: string, name: string) {
-    if (!confirm(`"${name}" 답사지를 삭제할까요?`)) return;
+    if (!confirm(`"${name}" 장소를 삭제할까요?`)) return;
 
     setError(null);
     setPendingId(siteId);
@@ -41,7 +57,11 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
     setError(null);
     setPendingId(siteId);
     startTransition(async () => {
+      // 화면을 먼저 바꾸고(낙관적), 서버 응답은 뒤따라 확인한다.
+      applyOptimisticReorder({ siteId, direction });
       const result = await reorderSite({ siteId, projectId, direction });
+      // 실패 시 낙관적 순서는 transition 종료와 함께 저절로 되돌아가므로,
+      // 에러 메시지만 띄워서 사용자가 되돌려졌다는 걸 분명히 알게 한다.
       if (result.error) setError(result.error);
       setPendingId(null);
     });
@@ -51,8 +71,8 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
     return (
       <p className="text-sm text-gray-600">
         {canEdit
-          ? "위에서 첫 답사지를 검색해 추가해보세요."
-          : "아직 등록된 답사지가 없어요."}
+          ? "위에서 첫 장소를 검색해 추가해보세요."
+          : "아직 등록된 장소가 없어요."}
       </p>
     );
   }
@@ -66,12 +86,12 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
       )}
 
       <ol className="space-y-2">
-        {sites.map((site, index) => {
+        {optimisticSites.map((site, index) => {
           const isFirst = index === 0;
-          const isLast = index === sites.length - 1;
+          const isLast = index === optimisticSites.length - 1;
           const isThisPending = pendingId === site.id && isPending;
 
-          // 답사지 정보 블록 (이름 + 주소 + 좌표) — 참여자 화면용.
+          // 장소 정보 블록 (이름 + 주소 + 좌표) — 참여자 화면용.
           // 해설이 있을 때만 이름을 링크처럼 보이게 한다.
           const siteInfo = (
             <>
@@ -137,7 +157,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
                   <button
                     type="button"
                     onClick={() => handleReorder(site.id, "up")}
-                    disabled={isFirst || isThisPending}
+                    disabled={isFirst || isPending}
                     className="rounded border px-2 py-1 text-xs text-gray-700 disabled:opacity-30"
                     title="위로"
                   >
@@ -146,7 +166,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
                   <button
                     type="button"
                     onClick={() => handleReorder(site.id, "down")}
-                    disabled={isLast || isThisPending}
+                    disabled={isLast || isPending}
                     className="rounded border px-2 py-1 text-xs text-gray-700 disabled:opacity-30"
                     title="아래로"
                   >

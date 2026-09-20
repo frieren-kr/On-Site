@@ -18,7 +18,7 @@ export async function createProject(
 
   // 2. 권한 확인 - ORGANIZER만 생성 가능
   if (session.user.role !== "ORGANIZER") {
-    return { error: "답사 준비기관만 프로젝트를 만들 수 있어요" };
+    return { error: "주최자만 프로젝트를 만들 수 있어요" };
   }
 
   // 3. 입력값 파싱 및 검증

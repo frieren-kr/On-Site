@@ -13,8 +13,18 @@ declare global {
   }
 }
 
+// SiteList에 넘기는 것과 같은 데이터를 재사용 (여기선 마커에 필요한 필드만)
+interface RegisteredSite {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  orderIndex: number;
+}
+
 interface SiteRegisterMapProps {
   projectId: string;
+  sites: RegisteredSite[];
 }
 
 interface SearchResult {
@@ -24,10 +34,43 @@ interface SearchResult {
   longitude: number;
 }
 
-export default function SiteRegisterMap({ projectId }: SiteRegisterMapProps) {
+// 등록된 장소 마커: 차분한 슬레이트 + 번호(목록 번호와 동일). 미등록 위치와 헷갈리지 않게 한다.
+function registeredMarkerContent(num: number): string {
+  return `
+    <div style="
+      width: 28px; height: 28px;
+      background: #64748b; color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 13px;
+      border: 2px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    ">${num}</div>
+  `;
+}
+
+// 검색/클릭으로 방금 찍은 미등록 위치: 눈에 띄는 빨강 핀(물방울) 모양 (아직 저장 전이라는 신호).
+// 인라인 SVG — 위는 둥글고 아래로 뾰족, 가운데 흰 원 구멍. 뾰족한 끝(12,28)이 실제 좌표.
+const PICKED_MARKER_CONTENT = `
+  <svg width="24" height="30" viewBox="0 0 24 30" xmlns="http://www.w3.org/2000/svg"
+       style="display:block; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));">
+    <path d="M12 0 C5.373 0 0 5.373 0 12 C0 20 12 28 12 28 C12 28 24 20 24 12 C24 5.373 18.627 0 12 0 Z"
+          fill="#ef4444" stroke="#ffffff" stroke-width="1.5" />
+    <circle cx="12" cy="12" r="4.5" fill="#ffffff" />
+  </svg>
+`;
+// 핀의 뾰족한 하단 끝 = anchor. 중앙이 아니라 이 끝이 좌표를 정확히 가리킨다.
+const PICKED_MARKER_ANCHOR = { x: 12, y: 28 };
+
+export default function SiteRegisterMap({
+  projectId,
+  sites,
+}: SiteRegisterMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
+  // 등록된 장소 마커들 (sites 갱신 시 정리 후 재생성하려고 따로 보관)
+  const siteMarkersRef = useRef<any[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [query, setQuery] = useState("");
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
@@ -52,31 +95,83 @@ export default function SiteRegisterMap({ projectId }: SiteRegisterMapProps) {
     window.navermap_authFailure = () => {
       setError("네이버 지도 인증 실패. Client ID나 도메인 등록을 확인하세요.");
     };
-    // 지도 클릭 리스너 - 좌표 직접 지정용
-    window.naver.maps.Event.addListener(map, "click", (e: any) => {
+    // 지도 클릭 리스너 - 좌표 직접 지정용.
+    // 마커는 항상 mapRef.current(현재 살아있는 지도)에 그린다 — 클로저에 잡힌
+    // 옛 인스턴스를 참조하지 않도록.
+    const clickListener = window.naver.maps.Event.addListener(
+      map,
+      "click",
+      (e: any) => {
         const lat = e.coord.lat();
         const lng = e.coord.lng();
 
         const result: SearchResult = {
-            name: "",
-            address: `직접 지정한 위치 (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
-            latitude: lat,
-            longitude: lng,
+          name: "",
+          address: `직접 지정한 위치 (${lat.toFixed(4)}, ${lng.toFixed(4)})`,
+          latitude: lat,
+          longitude: lng,
         };
 
         setSearchResult(result);
         setSiteName(""); // 사용자가 이름 직접 입력하도록 비움
 
-        // 마커 갱신
+        // 클릭 마커(markerRef)만 갱신 — 등록 마커(siteMarkersRef)와 독립.
         if (markerRef.current) {
-            markerRef.current.setMap(null);
+          markerRef.current.setMap(null);
         }
         markerRef.current = new window.naver.maps.Marker({
-            position: e.coord,
-            map,
+          position: e.coord,
+          map: mapRef.current,
+          icon: {
+            content: PICKED_MARKER_CONTENT,
+            anchor: new window.naver.maps.Point(
+              PICKED_MARKER_ANCHOR.x,
+              PICKED_MARKER_ANCHOR.y
+            ),
+          },
+          zIndex: 1000,
         });
-    });
+      }
+    );
+
+    // 정리: 리스너 해제 + 지도 파괴 + 마커 참조 리셋.
+    // StrictMode 이중 마운트/탭 전환 재마운트 때 이전 인스턴스가 남아
+    // 리스너와 mapRef가 서로 다른 지도를 가리키는 걸 막는다.
+    return () => {
+      window.naver.maps.Event.removeListener(clickListener);
+      // 지도를 파괴하면 위에 올린 마커들도 함께 사라지므로 참조만 비운다.
+      siteMarkersRef.current = [];
+      markerRef.current = null;
+      if (mapRef.current) {
+        mapRef.current.destroy?.();
+        mapRef.current = null;
+      }
+    };
   }, [isLoaded]);
+
+  // 등록된 장소 마커: sites가 바뀌면 이전 마커 정리 후 재생성 (중복 생성 방지)
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (!window.naver) return;
+    if (!mapRef.current) return;
+
+    siteMarkersRef.current.forEach((m) => m.setMap(null));
+    siteMarkersRef.current = [];
+
+    sites.forEach((site) => {
+      const num = site.orderIndex + 1; // 목록 번호와 동일
+      const marker = new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(site.latitude, site.longitude),
+        map: mapRef.current,
+        icon: {
+          content: registeredMarkerContent(num),
+          anchor: new window.naver.maps.Point(14, 14),
+        },
+        title: `${num}. ${site.name}`,
+      });
+      siteMarkersRef.current.push(marker);
+    });
+  }, [isLoaded, sites]);
 
   // 검색 실행 - 네이버 Geocoding submodule 사용
   function handleSearch() {
@@ -116,7 +211,7 @@ export default function SiteRegisterMap({ projectId }: SiteRegisterMapProps) {
         };
 
         setSearchResult(result);
-        setSiteName(""); // 답사지 이름 기본값
+        setSiteName(""); // 장소 이름 기본값
 
         // 지도 이동 + 마커 표시
         const position = new window.naver.maps.LatLng(lat, lng);
@@ -129,6 +224,14 @@ export default function SiteRegisterMap({ projectId }: SiteRegisterMapProps) {
         markerRef.current = new window.naver.maps.Marker({
           position,
           map: mapRef.current,
+          icon: {
+            content: PICKED_MARKER_CONTENT,
+            anchor: new window.naver.maps.Point(
+              PICKED_MARKER_ANCHOR.x,
+              PICKED_MARKER_ANCHOR.y
+            ),
+          },
+          zIndex: 1000,
         });
       }
     );
@@ -138,7 +241,7 @@ export default function SiteRegisterMap({ projectId }: SiteRegisterMapProps) {
   function handleSave() {
     if (!searchResult) return;
     if (!siteName.trim()) {
-      setError("답사지 이름을 입력하세요");
+      setError("장소 이름을 입력하세요");
       return;
     }
 
@@ -229,7 +332,7 @@ export default function SiteRegisterMap({ projectId }: SiteRegisterMapProps) {
             </p>
 
             <label className="mb-1 block text-sm font-medium text-gray-900">
-              답사지 이름 <span className="text-red-500">*</span>
+              장소 이름 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -246,7 +349,7 @@ export default function SiteRegisterMap({ projectId }: SiteRegisterMapProps) {
               disabled={isPending}
               className="w-full rounded bg-black py-2 text-sm text-white disabled:opacity-50"
             >
-              {isPending ? "저장 중..." : "이 위치를 답사지로 등록"}
+              {isPending ? "저장 중..." : "이 위치를 장소로 등록"}
             </button>
           </div>
         )}

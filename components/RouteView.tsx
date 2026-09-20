@@ -6,7 +6,7 @@ import ProjectMap from "./ProjectMap";
 import { distanceInMeters, type Coords } from "@/lib/geolocation";
 import { updateProjectRoute } from "@/app/projects/[id]/actions";
 
-// 이 반경 안의 답사지를 "근처"로 본다
+// 이 반경 안의 장소를 "근처"로 본다
 const NEARBY_RADIUS_M = 700;
 
 interface RouteStop {
@@ -27,7 +27,8 @@ interface DateRoute {
 interface RouteViewProps {
   projectId: string;
   canEdit: boolean;
-  stops: RouteStop[];                        // 전체(날짜 무관) 일정순 답사지
+  activeDate: string | null;                 // 날짜 선택은 상위(ProjectTabs)가 소유·보정해서 내려준다
+  stops: RouteStop[];                        // 전체(날짜 무관) 일정순 장소
   routeData: Record<string, DateRoute> | null; // 날짜별 경로
   routeIsStale: boolean;
 }
@@ -49,6 +50,7 @@ interface DateRoute {
 export default function RouteView({
   projectId,
   canEdit,
+  activeDate,
   stops,
   routeData,
   routeIsStale,
@@ -58,25 +60,12 @@ export default function RouteView({
   // "내 위치" 버튼으로 잡은 좌표. ProjectMap이 onLocate로 알려준다.
   const [myCoords, setMyCoords] = useState<Coords | null>(null);
 
-  // 날짜별로 stops 그룹핑
-  const dateKeys = useMemo(
-    () => Array.from(new Set(stops.map((s) => s.date))).sort(),
-    [stops]
-  );
-  const [activeDate, setActiveDate] = useState<string | null>(null);
-  const effectiveDate = useMemo(
-    () =>
-      activeDate && dateKeys.includes(activeDate)
-        ? activeDate
-        : dateKeys[0] ?? null,
-    [activeDate, dateKeys]
-  );
-
   // useMemo 필수: 매 렌더 새 배열을 만들면 ProjectMap의 effect가 재실행돼
   // 지도가 통째로 다시 만들어지고, 찍어둔 내 위치 마커가 사라진다.
+  // activeDate는 상위에서 이미 보정된 값이라 여기선 그대로 필터에만 쓴다.
   const activeStops = useMemo(
-    () => (effectiveDate ? stops.filter((s) => s.date === effectiveDate) : []),
-    [stops, effectiveDate]
+    () => (activeDate ? stops.filter((s) => s.date === activeDate) : []),
+    [stops, activeDate]
   );
   const mapStops = useMemo(
     () =>
@@ -89,7 +78,7 @@ export default function RouteView({
     [activeStops]
   );
 
-  // 현재 위치에서 NEARBY_RADIUS_M 안에 있는 당일 답사지 (가까운 순)
+  // 현재 위치에서 NEARBY_RADIUS_M 안에 있는 당일 장소 (가까운 순)
   const nearbyStops = useMemo(() => {
     if (!myCoords) return [];
     return activeStops
@@ -107,7 +96,7 @@ export default function RouteView({
   }, [myCoords, activeStops]);
 
   const activeRoute =
-    effectiveDate && routeData ? routeData[effectiveDate] ?? null : null;
+    activeDate && routeData ? routeData[activeDate] ?? null : null;
 
   function handleCalculate() {
     setError(null);
@@ -127,18 +116,10 @@ export default function RouteView({
     return h > 0 ? `${h}시간 ${r}분` : `${r}분`;
   }
 
-  function fmtDateLabel(key: string) {
-    return new Date(key).toLocaleDateString("ko-KR", {
-      month: "long",
-      day: "numeric",
-      weekday: "short",
-    });
-  }
-
   if (stops.length === 0) {
     return (
       <div className="rounded border bg-gray-50 p-6 text-center text-sm text-gray-500">
-        답사지가 연결된 일정이 없어요. 일정에 답사지를 연결하면 동선이
+        장소가 연결된 일정이 없어요. 일정에 장소를 연결하면 동선이
         표시됩니다.
       </div>
     );
@@ -171,7 +152,7 @@ export default function RouteView({
 
       {canEdit && routeIsStale && routeData && (
         <div className="mb-3 rounded bg-yellow-50 p-2 text-xs text-yellow-800">
-          일정이나 답사지가 변경됐어요. 경로를 다시 계산해주세요.
+          일정이나 장소가 변경됐어요. 경로를 다시 계산해주세요.
         </div>
       )}
 
@@ -181,35 +162,12 @@ export default function RouteView({
         </div>
       )}
 
-      {/* 날짜 탭 */}
-      {dateKeys.length > 1 && (
-        <div className="mb-3 flex flex-wrap gap-1 border-b">
-          {dateKeys.map((key) => {
-            const isActive = key === effectiveDate;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setActiveDate(key)}
-                className={`-mb-px border-b-2 px-3 py-2 text-sm ${
-                  isActive
-                    ? "border-black font-medium text-gray-900"
-                    : "border-transparent text-gray-500 hover:text-gray-800"
-                }`}
-              >
-                {fmtDateLabel(key)}
-              </button>
-            );
-          })}
-        </div>
-      )}
-
       {/* 근접 배너: 위치를 잡기 전(myCoords 없음)에는 아무것도 보이지 않는다 */}
       {myCoords &&
         (nearbyStops.length > 0 ? (
           <div className="mb-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
             <p className="mb-2 text-sm font-medium text-blue-900">
-              📍 현재 위치에서 {NEARBY_RADIUS_M}m 안에 답사지{" "}
+              📍 현재 위치에서 {NEARBY_RADIUS_M}m 안에 장소{" "}
               {nearbyStops.length}곳이 있어요
             </p>
             <ul className="space-y-1">
@@ -240,7 +198,7 @@ export default function RouteView({
           </div>
         ) : (
           <div className="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-600">
-            📍 현재 위치에서 {NEARBY_RADIUS_M}m 근처에 답사지가 없어요
+            📍 현재 위치에서 {NEARBY_RADIUS_M}m 근처에 장소가 없어요
           </div>
         ))}
 

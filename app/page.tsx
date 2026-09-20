@@ -1,57 +1,29 @@
-﻿"use client";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
-import { authClient } from "@/lib/auth-client";
-
-export default function Home() {
-  const { data: session, isPending } = authClient.useSession();
-
-  async function handleSignOut() {
-    await authClient.signOut();
-    window.location.href = "/";
-  }
-
-  if (isPending) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>로딩 중...</p>
-      </div>
-    );
+export default async function Home() {
+  const session = await getSession();
+  if (session) {
+    redirect("/dashboard");
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow">
-        <h1 className="mb-6 text-2xl text-black font-bold">OnSite</h1>
+        <h1 className="mb-2 text-2xl text-black font-bold">OnSite</h1>
+        <p className="mb-6 text-sm leading-relaxed text-gray-600">
+          OnSite — 장소·일정·동선을 한곳에서 관리하고, 참여자가 모바일에서 바로
+          확인할 수 있는 웹 서비스
+        </p>
 
-        {session ? (
-          <div>
-            <p className="mb-2 text-black">
-              <span className="font-medium">{session.user.name}</span>님, 환영해요
-            </p>
-            <p className="mb-4 text-sm text-gray-600">{session.user.email}</p>
-            <a
-             href="/dashboard"
-              className="mb-2 block w-full rounded bg-black py-2 text-center text-white"
-            >
-              대시보드
-            </a>
-            <button
-              onClick={handleSignOut}
-              className="w-full rounded bg-gray-800 py-2 text-white"
-            >
-              로그아웃
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <a href="/sign-in" className="block rounded bg-black py-2 text-center text-white">
-              로그인
-            </a>
-            <a href="/sign-up" className="block rounded border py-2 text-center">
-              회원가입
-            </a>
-          </div>
-        )}
+        <div className="space-y-2">
+          <a href="/sign-in" className="block rounded bg-black py-2 text-center text-white">
+            로그인
+          </a>
+          <a href="/sign-up" className="block rounded border py-2 text-center">
+            회원가입
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -58,7 +58,7 @@ export default function SignUpForm() {
 
         {isInviteFlow && (
           <p className="mb-6 text-sm text-blue-800">
-            초대받은 답사에 참여하려면 계정을 만들어주세요.
+            초대받은 프로젝트에 참여하려면 계정을 만들어주세요.
           </p>
         )}
 
@@ -79,7 +79,7 @@ export default function SignUpForm() {
                       : "border-gray-300 bg-white text-gray-700"
                   }`}
                 >
-                  답사 참여자
+                  참여자
                 </button>
                 <button
                   type="button"
@@ -90,13 +90,13 @@ export default function SignUpForm() {
                       : "border-gray-300 bg-white text-gray-700"
                   }`}
                 >
-                  답사 준비기관
+                  주최자
                 </button>
               </div>
               <p className="mt-2 text-xs text-gray-500">
                 {role === "PARTICIPANT"
-                  ? "초대받은 답사의 일정·해설을 보고 참여합니다"
-                  : "답사를 기획하고 참여자를 초대합니다"}
+                  ? "초대받은 프로젝트의 일정·해설을 보고 참여합니다"
+                  : "프로젝트를 기획하고 참여자를 초대합니다"}
               </p>
             </div>
           )}

@@ -31,7 +31,7 @@ export default async function NewProjectPage() {
 
         <div className="rounded-lg bg-white p-8 shadow">
           <h1 className="mb-6 text-2xl font-bold text-gray-900">
-            새 답사 프로젝트
+            새 프로젝트
           </h1>
 
           <NewProjectForm />

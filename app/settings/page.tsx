@@ -2,6 +2,7 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { getDeletionImpact } from "@/lib/account";
 import DeleteAccountSection from "@/components/DeleteAccountSection";
+import SignOutButton from "@/components/SignOutButton";
 import Link from "next/link";
 
 export default async function SettingsPage() {
@@ -35,32 +36,44 @@ export default async function SettingsPage() {
               <span className="text-gray-500">역할</span>
               <span className="text-gray-900">
                 {session.user.role === "ORGANIZER"
-                  ? "답사 준비기관"
+                  ? "주최자"
                   : session.user.role === "PARTICIPANT"
-                  ? "답사 참여자"
+                  ? "참여자"
                   : "관리자"}
               </span>
             </div>
           </div>
         </div>
 
-        {/* 위험 구역 - 탈퇴 */}
-        <div className="rounded-lg border border-red-200 bg-white p-6 shadow">
-          <h2 className="mb-2 text-lg font-semibold text-red-700">
-            회원 탈퇴
-          </h2>
-          <DeleteAccountSection
-            impact={{
-              ownedProjectCount: impact.ownedProjectCount,
-              affectedMembers: impact.affectedMembers,
-              joinedCount: impact.joinedCount,
-              ownedProjects: impact.ownedProjects.map((p) => ({
-                id: p.id,
-                title: p.title,
-                memberCount: p._count.members,
-              })),
-            }}
-          />
+        {/* 로그아웃 */}
+        <div className="mb-6 rounded-lg bg-white p-6 shadow">
+          <h2 className="mb-2 text-lg font-semibold text-gray-900">로그아웃</h2>
+          <p className="mb-4 text-sm text-gray-600">
+            이 기기에서 로그아웃해요. 계정과 데이터는 그대로 유지돼요.
+          </p>
+          <SignOutButton />
+        </div>
+
+        {/* 탈퇴와의 간격을 크게 둬서 오조작 방지 */}
+        <div className="mt-16">
+          {/* 위험 구역 - 탈퇴 */}
+          <div className="rounded-lg border border-red-200 bg-white p-6 shadow">
+            <h2 className="mb-2 text-lg font-semibold text-red-700">
+              회원 탈퇴
+            </h2>
+            <DeleteAccountSection
+              impact={{
+                ownedProjectCount: impact.ownedProjectCount,
+                affectedMembers: impact.affectedMembers,
+                joinedCount: impact.joinedCount,
+                ownedProjects: impact.ownedProjects.map((p) => ({
+                  id: p.id,
+                  title: p.title,
+                  memberCount: p._count.members,
+                })),
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

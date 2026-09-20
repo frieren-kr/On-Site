@@ -84,7 +84,7 @@ export default async function InvitePage({
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 py-8">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow">
-        <p className="mb-2 text-xs text-gray-500">답사 초대장</p>
+        <p className="mb-2 text-xs text-gray-500">프로젝트 초대장</p>
         <h1 className="mb-1 text-2xl font-bold text-gray-900">
           {invitation.project.title}
         </h1>
@@ -100,7 +100,7 @@ export default async function InvitePage({
 
         <div className="mb-6 grid grid-cols-2 gap-2 text-xs text-gray-600">
           <div className="rounded bg-gray-50 p-2">
-            답사지 {invitation.project._count.sites}곳
+            장소 {invitation.project._count.sites}곳
           </div>
           <div className="rounded bg-gray-50 p-2">
             참여자 {invitation.project._count.members}명
@@ -116,7 +116,7 @@ export default async function InvitePage({
         {alreadyMember ? (
           <div className="space-y-2">
             <div className="rounded bg-green-50 p-3 text-sm text-green-800">
-              이미 참여 중인 답사예요.
+              이미 참여 중인 프로젝트예요.
             </div>
             <Link
               href={`/projects/${invitation.projectId}`}
@@ -176,7 +176,7 @@ function InvalidInvite({
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="max-w-md rounded-lg bg-white p-8 shadow">
-        <h1 className="mb-4 text-xl font-bold text-gray-900">답사 초대장</h1>
+        <h1 className="mb-4 text-xl font-bold text-gray-900">프로젝트 초대장</h1>
         <p className="mb-4 text-sm text-gray-700">{message}</p>
         {primaryAction && (
           <Link

@@ -35,7 +35,7 @@ export default function AcceptInvitationButton({ token }: { token: string }) {
         disabled={isPending}
         className="w-full rounded bg-black py-2 text-sm text-white disabled:opacity-50"
       >
-        {isPending ? "참여 중..." : "이 답사에 참여하기"}
+        {isPending ? "참여 중..." : "이 프로젝트에 참여하기"}
       </button>
     </div>
   );

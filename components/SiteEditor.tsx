@@ -133,7 +133,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
         <>
           <div className="mb-4">
             <label className="mb-1 block text-sm font-medium text-gray-900">
-              답사지 이름 <span className="text-red-500">*</span>
+              장소 이름 <span className="text-red-500">*</span>
             </label>
             <input
               type="text"

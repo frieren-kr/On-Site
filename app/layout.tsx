@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "답사 SaaS",
-  description: "답사 준비기관과 참여자를 위한 답사 운영 플랫폼",
+  title: "OnSite",
+  description:
+    "장소·일정·동선을 한곳에서 관리하고, 참여자가 모바일에서 바로 확인할 수 있는 웹 서비스",
 };
 
 export default function RootLayout({

@@ -55,7 +55,7 @@ export default function EditProjectForm({ project }: { project: Project }) {
 
   function handleDelete() {
     const confirmed = confirm(
-      `"${project.title}" 프로젝트를 삭제할까요?\n답사지·일정·초대 정보도 모두 삭제되고 복구할 수 없어요.`
+      `"${project.title}" 프로젝트를 삭제할까요?\n장소·일정·초대 정보도 모두 삭제되고 복구할 수 없어요.`
     );
     if (!confirmed) return;
 
@@ -90,7 +90,7 @@ export default function EditProjectForm({ project }: { project: Project }) {
 
       <div>
         <label className="mb-1 block text-sm font-medium text-gray-900">
-          답사 개요
+          프로젝트 개요
         </label>
         <textarea
           value={description}

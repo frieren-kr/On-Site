@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-// 일정 순서대로 정렬된 답사지 (마커용)
+// 일정 순서대로 정렬된 장소 (마커용)
 interface RouteStop {
   siteId: string;
   name: string;
@@ -22,7 +22,7 @@ interface RouteStop {
 }
 
 interface ProjectMapProps {
-  stops: RouteStop[];           // 선택된 날짜의 일정 순 답사지
+  stops: RouteStop[];           // 선택된 날짜의 일정 순 장소
   routePath?: number[][] | null; // 그 날짜의 도로 경로
   height?: string;
   onLocate?: (coords: Coords) => void; // 위치를 잡으면 부모에게 좌표를 알려준다
@@ -187,7 +187,7 @@ export default function ProjectMap({
   if (stops.length === 0) {
     return (
       <div className="rounded border bg-gray-50 p-8 text-center text-sm text-gray-500">
-        이 날짜에는 답사지가 연결된 일정이 없어요.
+        이 날짜에는 장소가 연결된 일정이 없어요.
       </div>
     );
   }

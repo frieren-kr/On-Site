@@ -31,6 +31,8 @@ interface ScheduleSectionProps {
   canEdit: boolean;
   // siteId → 해설 유무. 참여자에게 링크를 걸지 판단하는 데만 쓴다.
   hasDescriptionBySiteId: Map<string, boolean>;
+  // 선택된 날짜. 날짜 선택은 상위(ProjectTabs)가 소유하고, 여기선 이 날짜만 보여준다.
+  activeDate: string | null;
 }
 
 // Date → "YYYY-MM-DD" (로컬 기준. UTC 변환 시 날짜 밀림 방지)
@@ -40,15 +42,6 @@ function toDateKey(date: Date): string {
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
-}
-
-// "YYYY-MM-DD" → "8월 17일 (월)"
-function formatTabLabel(dateKey: string): string {
-  return new Date(dateKey).toLocaleDateString("ko-KR", {
-    month: "long",
-    day: "numeric",
-    weekday: "short",
-  });
 }
 
 // 날짜별 그룹핑 + 각 날짜 안에서 시간순 정렬(방어적)
@@ -71,26 +64,18 @@ export default function ScheduleSection({
   schedules,
   canEdit,
   hasDescriptionBySiteId,
+  activeDate,
 }: ScheduleSectionProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [activeDate, setActiveDate] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const grouped = groupByDate(schedules);
-  const dateKeys = Object.keys(grouped).sort();
-
-  // activeDate가 비었거나 사라진 날짜면 첫 날짜로 대체
-  const effectiveDate =
-    activeDate && dateKeys.includes(activeDate)
-      ? activeDate
-      : dateKeys[0] ?? null;
-
-  const activeSchedules = effectiveDate ? grouped[effectiveDate] : [];
+  const activeSchedules = activeDate ? grouped[activeDate] ?? [] : [];
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow">
+    <div>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">
           일정 ({schedules.length})
@@ -121,7 +106,7 @@ export default function ScheduleSection({
           projectId={projectId}
           sites={sites}
           mode="create"
-          defaultDate={effectiveDate ?? ""}
+          defaultDate={activeDate ?? ""}
           onDone={() => setIsAdding(false)}
           onError={setError}
           isPending={isPending}
@@ -137,31 +122,7 @@ export default function ScheduleSection({
         </p>
       ) : (
         <>
-          {/* 날짜 탭 */}
-          <div className="mb-4 flex flex-wrap gap-1 border-b">
-            {dateKeys.map((dateKey) => {
-              const isActive = dateKey === effectiveDate;
-              return (
-                <button
-                  key={dateKey}
-                  type="button"
-                  onClick={() => setActiveDate(dateKey)}
-                  className={`-mb-px border-b-2 px-3 py-2 text-sm ${
-                    isActive
-                      ? "border-black font-medium text-gray-900"
-                      : "border-transparent text-gray-500 hover:text-gray-800"
-                  }`}
-                >
-                  {formatTabLabel(dateKey)}
-                  <span className="ml-1 text-xs text-gray-400">
-                    ({grouped[dateKey].length})
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* 선택된 날짜의 일정만 */}
+          {/* 선택된 날짜(activeDate)의 일정만 */}
           <ol className="space-y-1">
             {activeSchedules.map((schedule) => {
               const isEditingThis = editingId === schedule.id;
@@ -352,7 +313,7 @@ function ScheduleForm({
           onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={100}
-          placeholder="예: 근정전 답사, 점심 식사, 버스 이동"
+          placeholder="예: 근정전 관람, 점심 식사, 버스 이동"
           className="w-full rounded border px-3 py-2 text-sm text-gray-900"
         />
       </div>
@@ -398,14 +359,14 @@ function ScheduleForm({
 
       <div>
         <label className="mb-1 block text-xs font-medium text-gray-900">
-          연결할 답사지 (선택)
+          연결할 장소 (선택)
         </label>
         <select
           value={siteId}
           onChange={(e) => setSiteId(e.target.value)}
           className="w-full rounded border px-3 py-2 text-sm text-gray-900"
         >
-          <option value="">답사지 없음 (자유 일정)</option>
+          <option value="">장소 없음 (자유 일정)</option>
           {sites.map((site) => (
             <option key={site.id} value={site.id}>
               {site.name}

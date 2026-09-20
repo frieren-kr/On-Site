@@ -46,7 +46,7 @@ export default function SignInForm() {
 
         {inviteToken && (
           <p className="mb-4 text-sm text-blue-800">
-            로그인 후 초대받은 답사 페이지로 이동해요.
+            로그인 후 초대받은 프로젝트 페이지로 이동해요.
           </p>
         )}
 

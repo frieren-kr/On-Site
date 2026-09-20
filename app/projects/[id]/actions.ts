@@ -30,13 +30,13 @@ export async function createSite(input: {
     return { error: parsed.error.issues[0].message };
   }
 
-  // 3. 권한 검사 - 이 프로젝트의 organizer만 답사지 추가 가능
+  // 3. 권한 검사 - 이 프로젝트의 organizer만 장소 추가 가능
   const isOwner = await isProjectOrganizer(session.user.id, input.projectId);
   if (!isOwner) {
-    return { error: "이 프로젝트의 답사지를 추가할 권한이 없어요" };
+    return { error: "이 프로젝트의 장소를 추가할 권한이 없어요" };
   }
 
-  // 4. 현재 답사지 개수 확인 (orderIndex 자동 할당용)
+  // 4. 현재 장소 개수 확인 (orderIndex 자동 할당용)
   const count = await prisma.site.count({
     where: { projectId: input.projectId },
   });
@@ -70,7 +70,7 @@ export async function deleteSite(input: { siteId: string; projectId: string }) {
     where: { id: input.siteId },
   });
   if (!site || site.projectId !== input.projectId) {
-    return { error: "답사지를 찾을 수 없어요" };
+    return { error: "장소를 찾을 수 없어요" };
   }
 
   await prisma.$transaction([
@@ -110,16 +110,16 @@ export async function reorderSite(input: {
     return { error: "권한이 없어요" };
   }
 
-  // 이동 대상 답사지 조회
+  // 이동 대상 장소 조회
   const current = await prisma.site.findUnique({
     where: { id: input.siteId },
   });
   if (!current || current.projectId !== input.projectId) {
-    return { error: "답사지를 찾을 수 없어요" };
+    return { error: "장소를 찾을 수 없어요" };
   }
 
-  // 위로 = orderIndex - 1인 답사지와 자리 바꿈
-  // 아래로 = orderIndex + 1인 답사지와 자리 바꿈
+  // 위로 = orderIndex - 1인 장소와 자리 바꿈
+  // 아래로 = orderIndex + 1인 장소와 자리 바꿈
   const targetIndex =
     input.direction === "up"
       ? current.orderIndex - 1
@@ -135,7 +135,7 @@ export async function reorderSite(input: {
     return { error: "더 이동할 수 없어요" }; // 맨 위/아래
   }
 
-  // 두 답사지의 orderIndex를 서로 바꿈 (트랜잭션)
+  // 두 장소의 orderIndex를 서로 바꿈 (트랜잭션)
   await prisma.$transaction([
     prisma.site.update({
       where: { id: current.id },
@@ -169,12 +169,12 @@ export async function updateSite(input: {
     return { error: "수정 권한이 없어요" };
   }
 
-  // IDOR 방어 - 이 답사지가 진짜 이 프로젝트 소속인지 확인
+  // IDOR 방어 - 이 장소가 진짜 이 프로젝트 소속인지 확인
   const site = await prisma.site.findUnique({
     where: { id: input.siteId },
   });
   if (!site || site.projectId !== input.projectId) {
-    return { error: "답사지를 찾을 수 없어요" };
+    return { error: "장소를 찾을 수 없어요" };
   }
 
   await prisma.site.update({
@@ -220,7 +220,7 @@ export async function createSchedule(input: {
       where: { id: input.siteId },
     });
     if (!site || site.projectId !== input.projectId) {
-      return { error: "연결할 답사지가 이 프로젝트에 없어요" };
+      return { error: "연결할 장소가 이 프로젝트에 없어요" };
     }
   }
 
@@ -287,7 +287,7 @@ export async function updateSchedule(input: {
       where: { id: input.siteId },
     });
     if (!site || site.projectId !== input.projectId) {
-      return { error: "연결할 답사지가 이 프로젝트에 없어요" };
+      return { error: "연결할 장소가 이 프로젝트에 없어요" };
     }
   }
 
@@ -504,11 +504,11 @@ export async function updateProjectRoute(input: { projectId: string }) {
     return { error: "경로를 계산할 권한이 없어요" };
   }
 
-  // 일정을 날짜순·시간순으로, 답사지 좌표까지 함께 조회
+  // 일정을 날짜순·시간순으로, 장소 좌표까지 함께 조회
   const schedules = await prisma.schedule.findMany({
     where: {
       projectId: input.projectId,
-      siteId: { not: null }, // 답사지 연결된 일정만
+      siteId: { not: null }, // 장소 연결된 일정만
     },
     orderBy: [{ date: "asc" }, { startTime: "asc" }],
     include: {
@@ -520,7 +520,7 @@ export async function updateProjectRoute(input: { projectId: string }) {
 
   if (schedules.length < 2) {
     return {
-      error: "답사지가 연결된 일정이 2개 이상 있어야 경로를 계산할 수 있어요",
+      error: "장소가 연결된 일정이 2개 이상 있어야 경로를 계산할 수 있어요",
     };
   }
 
@@ -555,12 +555,12 @@ export async function updateProjectRoute(input: { projectId: string }) {
 
   try {
     for (const [dateKey, points] of Object.entries(byDate)) {
-      // 그 날 답사지가 1곳뿐이면 경로 없음 (건너뜀)
+      // 그 날 장소가 1곳뿐이면 경로 없음 (건너뜀)
       if (points.length < 2) continue;
 
       if (points.length > 16) {
         return {
-          error: `${dateKey}에 답사지가 너무 많아요 (하루 최대 16곳)`,
+          error: `${dateKey}에 장소가 너무 많아요 (하루 최대 16곳)`,
         };
       }
 
@@ -586,7 +586,7 @@ export async function updateProjectRoute(input: { projectId: string }) {
 
     if (Object.keys(routeData).length === 0) {
       return {
-        error: "경로를 계산할 수 있는 날짜가 없어요 (하루에 답사지 2곳 이상 필요)",
+        error: "경로를 계산할 수 있는 날짜가 없어요 (하루에 장소 2곳 이상 필요)",
       };
     }
 

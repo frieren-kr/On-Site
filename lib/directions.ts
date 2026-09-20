@@ -22,7 +22,7 @@ interface RouteResult {
 export async function calculateRoute(
   points: RoutePoint[]
 ): Promise<RouteResult | null> {
-  // 답사지가 2개 미만이면 경로 없음
+  // 장소가 2개 미만이면 경로 없음
   if (points.length < 2) {
     return null;
   }
@@ -48,7 +48,7 @@ export async function calculateRoute(
   
   const start = routePoints[0];
   const goal = routePoints[routePoints.length - 1];
-  const waypoints = routePoints.slice(1, -1); // 중간 답사지들
+  const waypoints = routePoints.slice(1, -1); // 중간 장소들
 
   // 좌표는 "경도,위도" 형식 (네이버 규칙: 경도 먼저)
   const startParam = `${start.longitude},${start.latitude}`;

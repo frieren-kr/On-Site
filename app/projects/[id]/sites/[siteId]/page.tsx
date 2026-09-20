@@ -19,7 +19,7 @@ export default async function SitePage({
   const hasAccess = await canAccessProject(session.user.id, projectId);
   if (!hasAccess) notFound();
 
-  // 답사지 조회 + 프로젝트 소속 확인 (IDOR 방어)
+  // 장소 조회 + 프로젝트 소속 확인 (IDOR 방어)
   const site = await prisma.site.findUnique({
     where: { id: siteId },
     include: {

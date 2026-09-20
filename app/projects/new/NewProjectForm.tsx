@@ -24,20 +24,20 @@ export default function NewProjectForm() {
           type="text"
           required
           maxLength={100}
-          placeholder="예: 2026 봄 경주 답사"
+          placeholder="예: 2026 봄 경주 워크숍"
           className="w-full rounded border px-3 py-2 text-gray-900"
         />
       </div>
 
       <div>
         <label className="mb-1 block text-sm font-medium text-gray-900">
-          답사 개요
+          프로젝트 개요
         </label>
         <textarea
           name="description"
           rows={4}
           maxLength={1000}
-          placeholder="답사 목적, 주제 등을 간단히 적어주세요"
+          placeholder="프로젝트 목적, 주제 등을 간단히 적어주세요"
           className="w-full rounded border px-3 py-2 text-gray-900"
         />
       </div>
@@ -66,7 +66,7 @@ export default function NewProjectForm() {
       </div>
 
       <div className="rounded bg-blue-50 p-3 text-sm text-blue-900">
-        프로젝트를 만든 뒤 답사지·일정·해설을 추가하고 참여자를 초대할 수 있어요.
+        프로젝트를 만든 뒤 장소·일정·해설을 추가하고 참여자를 초대할 수 있어요.
       </div>
 
       <div className="flex gap-2 pt-2">

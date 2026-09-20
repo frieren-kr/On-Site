@@ -79,7 +79,7 @@ export default function DeleteAccountSection({
             </li>
           )}
           {impact.joinedCount > 0 && (
-            <li>• 회원님이 참여 중인 답사 {impact.joinedCount}건의 참여 기록</li>
+            <li>• 회원님이 참여 중인 프로젝트 {impact.joinedCount}건의 참여 기록</li>
           )}
         </ul>
       </div>
