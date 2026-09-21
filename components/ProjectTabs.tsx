@@ -128,19 +128,19 @@ export default function ProjectTabs({
   const topTabClass = (active: boolean) =>
     `whitespace-nowrap border-b-2 px-4 py-3 text-base font-semibold ${
       active
-        ? "border-black text-gray-900"
+        ? "border-accent text-gray-900"
         : "border-transparent text-gray-500 hover:text-gray-800"
     }`;
 
   const subTabClass = (active: boolean) =>
     `border-b-2 py-2 text-sm ${
       active
-        ? "border-gray-800 font-medium text-gray-900"
+        ? "border-accent font-medium text-gray-900"
         : "border-transparent text-gray-400 hover:text-gray-700"
     }`;
 
   return (
-    <div className="mb-6 rounded-lg bg-white shadow">
+    <div className="mb-6 rounded-lg bg-card shadow">
       {/* 상단 탭 바: 왼쪽 날짜(가로 스크롤) / 오른쪽 장소(고정) — 서로 다른 축 */}
       <div className="flex items-stretch border-b border-gray-200">
         <div className="flex-1 overflow-x-auto">

@@ -33,7 +33,7 @@ export default function AcceptInvitationButton({ token }: { token: string }) {
         type="button"
         onClick={handleAccept}
         disabled={isPending}
-        className="w-full rounded bg-black py-2 text-sm text-white disabled:opacity-50"
+        className="w-full rounded bg-accent py-2 text-sm text-ink hover:bg-accent-strong disabled:opacity-50"
       >
         {isPending ? "참여 중..." : "이 프로젝트에 참여하기"}
       </button>

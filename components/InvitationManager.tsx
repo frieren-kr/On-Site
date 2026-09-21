@@ -96,7 +96,7 @@ export default function InvitationManager({
   const pendingInvitations = invitations.filter((i) => i.status === "PENDING");
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow">
+    <div className="rounded-lg bg-card p-6 shadow">
       <h2 className="mb-4 text-lg font-semibold text-gray-900">
         참여자 초대
       </h2>
@@ -120,7 +120,7 @@ export default function InvitationManager({
           <button
             type="submit"
             disabled={isPending}
-            className="rounded bg-black px-3 py-1 text-sm text-white disabled:opacity-50"
+            className="rounded bg-accent px-3 py-1 text-sm text-ink hover:bg-accent-strong disabled:opacity-50"
           >
             {isPending ? "생성 중..." : "초대 링크 만들기"}
           </button>

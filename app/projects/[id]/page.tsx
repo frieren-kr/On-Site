@@ -106,7 +106,7 @@ export default async function ProjectPage({
     });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6 sm:py-10">
+    <div className="min-h-screen bg-surface py-6 sm:py-10">
       <div className="mx-auto max-w-5xl px-4">
         <Link
           href="/dashboard"
@@ -116,7 +116,7 @@ export default async function ProjectPage({
         </Link>
 
         {/* 프로젝트 헤더 */}
-        <div className="mb-6 rounded-lg bg-white p-6 shadow">
+        <div className="mb-6 rounded-lg bg-card p-6 shadow">
           <div className="mb-3 flex items-start justify-between gap-2">
             <div>
               <div className="mb-2 flex items-center gap-2">
@@ -161,7 +161,7 @@ export default async function ProjectPage({
 
         {/* 좁은 화면 주최자용 안내 (모바일에서만) */}
         {canEdit && (
-          <p className="mb-4 rounded bg-gray-50 p-3 text-xs text-gray-500 sm:hidden">
+          <p className="mb-4 rounded bg-panel p-3 text-xs text-gray-500 sm:hidden">
             편집은 PC 환경에서 하시는 걸 권장해요.
           </p>
         )}

@@ -35,7 +35,7 @@ export default async function SitePage({
   const canEdit = await isProjectOrganizer(session.user.id, projectId);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen bg-surface py-10">
       <div className="mx-auto max-w-3xl px-4">
         <Link
           href={`/projects/${projectId}`}

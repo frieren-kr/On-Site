@@ -87,7 +87,7 @@ export default function ScheduleSection({
               setIsAdding(true);
               setError(null);
             }}
-            className="rounded bg-black px-3 py-1 text-sm text-white"
+            className="rounded bg-accent px-3 py-1 text-sm text-ink hover:bg-accent-strong"
           >
             + 일정 추가
           </button>
@@ -169,7 +169,7 @@ export default function ScheduleSection({
                       hasDescriptionBySiteId.get(schedule.site.id) ? (
                         <Link
                           href={`/projects/${projectId}/sites/${schedule.site.id}`}
-                          className="text-xs text-blue-600 underline hover:text-blue-800"
+                          className="text-xs text-link underline hover:text-blue-800"
                         >
                           → {schedule.site.name}
                         </Link>
@@ -301,7 +301,7 @@ function ScheduleForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-3 space-y-3 rounded border border-gray-300 bg-gray-50 p-4"
+      className="mb-3 space-y-3 rounded border border-gray-300 bg-panel p-4"
     >
       <div>
         <label className="mb-1 block text-xs font-medium text-gray-900">
@@ -387,7 +387,7 @@ function ScheduleForm({
         <button
           type="submit"
           disabled={isPending}
-          className="rounded bg-black px-3 py-1 text-sm text-white disabled:opacity-50"
+          className="rounded bg-accent px-3 py-1 text-sm text-ink hover:bg-accent-strong disabled:opacity-50"
         >
           {isPending ? "저장 중..." : "저장"}
         </button>

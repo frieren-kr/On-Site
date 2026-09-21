@@ -98,7 +98,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
               <h3
                 className={
                   site.hasDescription
-                    ? "font-medium text-blue-600 underline"
+                    ? "font-medium text-link underline"
                     : "font-medium text-gray-900"
                 }
               >
@@ -128,7 +128,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
                   {/* organizer는 해설 유무와 무관하게 항상 링크 */}
                   <Link
                     href={`/projects/${projectId}/sites/${site.id}`}
-                    className="font-medium text-blue-600 underline hover:text-blue-800"
+                    className="font-medium text-link underline hover:text-blue-800"
                   >
                     {site.name}
                   </Link>

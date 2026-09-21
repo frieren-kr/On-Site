@@ -12,7 +12,7 @@ export default async function SettingsPage() {
   const impact = await getDeletionImpact(session.user.id);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen bg-surface py-10">
       <div className="mx-auto max-w-2xl px-4">
         <Link
           href="/dashboard"
@@ -21,7 +21,7 @@ export default async function SettingsPage() {
           ← 대시보드
         </Link>
 
-        <div className="mb-6 rounded-lg bg-white p-6 shadow">
+        <div className="mb-6 rounded-lg bg-card p-6 shadow">
           <h1 className="mb-4 text-2xl font-bold text-gray-900">설정</h1>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between border-b pb-2">
@@ -46,7 +46,7 @@ export default async function SettingsPage() {
         </div>
 
         {/* 로그아웃 */}
-        <div className="mb-6 rounded-lg bg-white p-6 shadow">
+        <div className="mb-6 rounded-lg bg-card p-6 shadow">
           <h2 className="mb-2 text-lg font-semibold text-gray-900">로그아웃</h2>
           <p className="mb-4 text-sm text-gray-600">
             이 기기에서 로그아웃해요. 계정과 데이터는 그대로 유지돼요.
@@ -57,7 +57,7 @@ export default async function SettingsPage() {
         {/* 탈퇴와의 간격을 크게 둬서 오조작 방지 */}
         <div className="mt-16">
           {/* 위험 구역 - 탈퇴 */}
-          <div className="rounded-lg border border-red-200 bg-white p-6 shadow">
+          <div className="rounded-lg border border-red-200 bg-card p-6 shadow">
             <h2 className="mb-2 text-lg font-semibold text-red-700">
               회원 탈퇴
             </h2>

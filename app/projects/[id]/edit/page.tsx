@@ -25,7 +25,7 @@ export default async function EditProjectPage({
   if (!project) notFound();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen bg-surface py-10">
       <div className="mx-auto max-w-2xl px-4">
         <Link
           href={`/projects/${id}`}
@@ -34,7 +34,7 @@ export default async function EditProjectPage({
           ← 프로젝트로
         </Link>
 
-        <div className="rounded-lg bg-white p-8 shadow">
+        <div className="rounded-lg bg-card p-8 shadow">
           <h1 className="mb-6 text-2xl font-bold text-gray-900">
             프로젝트 수정
           </h1>

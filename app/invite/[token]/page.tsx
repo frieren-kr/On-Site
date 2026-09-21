@@ -82,8 +82,8 @@ export default async function InvitePage({
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 py-8">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow">
+    <div className="flex min-h-screen items-center justify-center bg-surface py-8">
+      <div className="w-full max-w-md rounded-lg bg-card p-8 shadow">
         <p className="mb-2 text-xs text-gray-500">프로젝트 초대장</p>
         <h1 className="mb-1 text-2xl font-bold text-gray-900">
           {invitation.project.title}
@@ -99,10 +99,10 @@ export default async function InvitePage({
         )}
 
         <div className="mb-6 grid grid-cols-2 gap-2 text-xs text-gray-600">
-          <div className="rounded bg-gray-50 p-2">
+          <div className="rounded bg-panel p-2">
             장소 {invitation.project._count.sites}곳
           </div>
-          <div className="rounded bg-gray-50 p-2">
+          <div className="rounded bg-panel p-2">
             참여자 {invitation.project._count.members}명
           </div>
         </div>
@@ -120,7 +120,7 @@ export default async function InvitePage({
             </div>
             <Link
               href={`/projects/${invitation.projectId}`}
-              className="block rounded bg-black py-2 text-center text-sm text-white"
+              className="block rounded bg-accent py-2 text-center text-sm text-ink hover:bg-accent-strong"
             >
               프로젝트로 이동
             </Link>
@@ -131,7 +131,7 @@ export default async function InvitePage({
               href={`/sign-up?invite=${token}&email=${encodeURIComponent(
                 invitation.email
               )}`}
-              className="block rounded bg-black py-2 text-center text-sm text-white"
+              className="block rounded bg-accent py-2 text-center text-sm text-ink hover:bg-accent-strong"
             >
               회원가입하고 참여
             </Link>
@@ -174,14 +174,14 @@ function InvalidInvite({
   primaryAction?: { label: string; href: string };
 }) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="max-w-md rounded-lg bg-white p-8 shadow">
+    <div className="flex min-h-screen items-center justify-center bg-surface">
+      <div className="max-w-md rounded-lg bg-card p-8 shadow">
         <h1 className="mb-4 text-xl font-bold text-gray-900">프로젝트 초대장</h1>
         <p className="mb-4 text-sm text-gray-700">{message}</p>
         {primaryAction && (
           <Link
             href={primaryAction.href}
-            className="block rounded bg-black py-2 text-center text-sm text-white"
+            className="block rounded bg-accent py-2 text-center text-sm text-ink hover:bg-accent-strong"
           >
             {primaryAction.label}
           </Link>

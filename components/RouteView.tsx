@@ -118,7 +118,7 @@ export default function RouteView({
 
   if (stops.length === 0) {
     return (
-      <div className="rounded border bg-gray-50 p-6 text-center text-sm text-gray-500">
+      <div className="rounded border bg-panel p-6 text-center text-sm text-gray-500">
         장소가 연결된 일정이 없어요. 일정에 장소를 연결하면 동선이
         표시됩니다.
       </div>
@@ -139,7 +139,7 @@ export default function RouteView({
             type="button"
             onClick={handleCalculate}
             disabled={isPending}
-            className="rounded bg-blue-600 px-3 py-1 text-sm text-white disabled:opacity-50"
+            className="rounded bg-accent px-3 py-1 text-sm text-ink hover:bg-accent-strong disabled:opacity-50"
           >
             {isPending
               ? "계산 중..."
@@ -180,7 +180,7 @@ export default function RouteView({
                   {canEdit || s.hasDescription ? (
                     <Link
                       href={`/projects/${projectId}/sites/${s.siteId}`}
-                      className="flex-1 truncate text-blue-600 underline hover:text-blue-800"
+                      className="flex-1 truncate text-link underline hover:text-blue-800"
                     >
                       {s.name}
                     </Link>
@@ -197,7 +197,7 @@ export default function RouteView({
             </ul>
           </div>
         ) : (
-          <div className="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-600">
+          <div className="mb-3 rounded-lg border border-gray-200 bg-panel p-3 text-sm text-gray-600">
             📍 현재 위치에서 {NEARBY_RADIUS_M}m 근처에 장소가 없어요
           </div>
         ))}
@@ -214,7 +214,7 @@ export default function RouteView({
         </div>
       )}
       {activeRoute && activeRoute.legs && activeRoute.legs.length > 0 && (
-        <div className="mb-3 rounded border border-gray-200 bg-gray-50 p-3">
+        <div className="mb-3 rounded border border-gray-200 bg-panel p-3">
           <p className="mb-2 text-xs font-medium text-gray-700">구간별 이동</p>
           <ul className="space-y-1">
             {activeRoute.legs.map((leg, i) => (

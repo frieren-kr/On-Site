@@ -186,7 +186,7 @@ export default function ProjectMap({
 
   if (stops.length === 0) {
     return (
-      <div className="rounded border bg-gray-50 p-8 text-center text-sm text-gray-500">
+      <div className="rounded border bg-panel p-8 text-center text-sm text-gray-500">
         이 날짜에는 장소가 연결된 일정이 없어요.
       </div>
     );
@@ -206,7 +206,7 @@ export default function ProjectMap({
           type="button"
           onClick={handleShowMyLocation}
           disabled={!isLoaded || locating}
-          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-lg border border-secondary bg-secondary-tint px-4 py-2 text-sm font-medium text-secondary-ink shadow-sm hover:bg-secondary-tint-strong disabled:opacity-50"
         >
           <span className="text-base">📍</span>
           {locating ? "위치 확인 중..." : "내 위치"}

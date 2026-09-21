@@ -52,8 +52,8 @@ export default function SignUpForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow">
+    <div className="flex min-h-screen items-center justify-center bg-surface">
+      <div className="w-full max-w-md rounded-lg bg-card p-8 shadow">
         <h1 className="mb-2 text-2xl font-bold text-gray-900">회원가입</h1>
 
         {isInviteFlow && (
@@ -75,8 +75,8 @@ export default function SignUpForm() {
                   onClick={() => setRole("PARTICIPANT")}
                   className={`rounded border p-3 text-sm ${
                     role === "PARTICIPANT"
-                      ? "border-black bg-black text-white"
-                      : "border-gray-300 bg-white text-gray-700"
+                      ? "border-secondary bg-secondary-tint text-secondary-ink hover:bg-secondary-tint-strong"
+                      : "border-border bg-card text-ink"
                   }`}
                 >
                   참여자
@@ -86,8 +86,8 @@ export default function SignUpForm() {
                   onClick={() => setRole("ORGANIZER")}
                   className={`rounded border p-3 text-sm ${
                     role === "ORGANIZER"
-                      ? "border-black bg-black text-white"
-                      : "border-gray-300 bg-white text-gray-700"
+                      ? "border-secondary bg-secondary-tint text-secondary-ink hover:bg-secondary-tint-strong"
+                      : "border-border bg-card text-ink"
                   }`}
                 >
                   주최자
@@ -156,7 +156,7 @@ export default function SignUpForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full rounded bg-black py-2 text-white disabled:opacity-50"
+            className="w-full rounded bg-accent py-2 text-ink hover:bg-accent-strong disabled:opacity-50"
           >
             {isLoading ? "처리 중..." : "가입하기"}
           </button>

@@ -57,7 +57,7 @@ export default function RouteControl({
   }
 
   return (
-    <div className="mb-3 rounded border bg-gray-50 p-3">
+    <div className="mb-3 rounded border bg-panel p-3">
       <div className="flex items-center justify-between">
         <div>
           {hasRoute ? (
@@ -81,7 +81,7 @@ export default function RouteControl({
             type="button"
             onClick={handleCalculate}
             disabled={isPending}
-            className="rounded bg-blue-600 px-3 py-1 text-sm text-white disabled:opacity-50"
+            className="rounded bg-accent px-3 py-1 text-sm text-ink hover:bg-accent-strong disabled:opacity-50"
           >
             {isPending
               ? "계산 중..."

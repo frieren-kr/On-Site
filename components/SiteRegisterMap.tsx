@@ -298,7 +298,7 @@ export default function SiteRegisterMap({
             type="button"
             onClick={handleSearch}
             disabled={!isLoaded}
-            className="rounded bg-blue-600 px-4 py-2 text-sm text-white disabled:opacity-50"
+            className="rounded border border-secondary bg-secondary-tint px-4 py-2 text-sm text-secondary-ink hover:bg-secondary-tint-strong disabled:opacity-50"
           >
             검색
           </button>
@@ -322,7 +322,7 @@ export default function SiteRegisterMap({
 
         {/* 검색 결과 표시 + 저장 폼 */}
         {searchResult && (
-          <div className="rounded border bg-gray-50 p-4">
+          <div className="rounded border bg-panel p-4">
             <p className="mb-1 text-xs text-gray-500">
               위도 {searchResult.latitude.toFixed(6)} · 경도{" "}
               {searchResult.longitude.toFixed(6)}
@@ -347,7 +347,7 @@ export default function SiteRegisterMap({
               type="button"
               onClick={handleSave}
               disabled={isPending}
-              className="w-full rounded bg-black py-2 text-sm text-white disabled:opacity-50"
+              className="w-full rounded bg-accent py-2 text-sm text-ink hover:bg-accent-strong disabled:opacity-50"
             >
               {isPending ? "저장 중..." : "이 위치를 장소로 등록"}
             </button>

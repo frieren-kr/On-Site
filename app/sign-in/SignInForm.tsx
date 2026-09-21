@@ -40,8 +40,8 @@ export default function SignInForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow">
+    <div className="flex min-h-screen items-center justify-center bg-surface">
+      <div className="w-full max-w-md rounded-lg bg-card p-8 shadow">
         <h1 className="mb-2 text-2xl text-black font-bold">로그인</h1>
 
         {inviteToken && (
@@ -86,7 +86,7 @@ export default function SignInForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full rounded bg-black py-2 text-white disabled:opacity-50"
+            className="w-full rounded bg-accent py-2 text-ink hover:bg-accent-strong disabled:opacity-50"
           >
             {isLoading ? "로그인 중..." : "로그인"}
           </button>

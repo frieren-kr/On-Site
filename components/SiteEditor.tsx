@@ -85,7 +85,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
   }
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow">
+    <div className="rounded-lg bg-card p-6 shadow">
       {/* 위치 정보 - 항상 표시 */}
       <div className="mb-4 border-b pb-4">
         {site.address && (
@@ -226,7 +226,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
                 className="w-full rounded border px-3 py-2 font-mono text-sm text-gray-900"
               />
             ) : (
-              <div className="min-h-[400px] rounded border bg-gray-50 p-4">
+              <div className="min-h-[400px] rounded border bg-panel p-4">
                 {description ? (
                   <div className="prose prose-sm max-w-none text-gray-900 [&_img]:max-w-full [&_img]:h-auto">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -265,7 +265,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
               type="button"
               onClick={handleSave}
               disabled={isPending}
-              className="rounded bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
+              className="rounded bg-accent px-4 py-2 text-sm text-ink hover:bg-accent-strong disabled:opacity-50"
             >
               {isPending ? "저장 중..." : "저장"}
             </button>

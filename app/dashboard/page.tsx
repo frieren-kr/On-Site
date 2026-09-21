@@ -45,7 +45,7 @@ export default async function DashboardPage({
       : [];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen bg-surface py-10">
       <div className="mx-auto max-w-4xl px-4">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
@@ -86,22 +86,24 @@ export default async function DashboardPage({
               <h2 className="text-lg font-semibold text-gray-900">
                 내 프로젝트 ({projects.length})
               </h2>
-              <Link
-                href="/projects/new"
-                className="rounded bg-black px-4 py-2 text-sm text-white"
-              >
-                + 새 프로젝트
-              </Link>
+              {projects.length > 0 && (
+                <Link
+                  href="/projects/new"
+                  className="rounded bg-accent px-4 py-2 text-sm text-ink hover:bg-accent-strong"
+                >
+                  + 새 프로젝트
+                </Link>
+              )}
             </div>
 
             {projects.length === 0 ? (
-              <div className="rounded-lg bg-white p-8 text-center shadow">
+              <div className="rounded-lg bg-card p-8 text-center shadow">
                 <p className="mb-4 text-gray-600">
                   아직 만든 프로젝트가 없어요.
                 </p>
                 <Link
                   href="/projects/new"
-                  className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
+                  className="inline-block rounded bg-accent px-4 py-2 text-sm text-ink hover:bg-accent-strong"
                 >
                   첫 프로젝트 만들기
                 </Link>
@@ -128,7 +130,7 @@ export default async function DashboardPage({
             </h2>
 
             {projects.length === 0 ? (
-              <div className="rounded-lg bg-white p-8 text-center shadow">
+              <div className="rounded-lg bg-card p-8 text-center shadow">
                 <p className="text-gray-600">
                   아직 초대받은 프로젝트가 없어요.
                 </p>
@@ -193,7 +195,7 @@ function ProjectCard({
   return (
     <Link
       href={`/projects/${project.id}`}
-      className="block rounded-lg bg-white p-4 shadow hover:shadow-md"
+      className="block rounded-lg bg-card p-4 shadow hover:shadow-md"
     >
       <h3 className="mb-1 font-semibold text-gray-900">{project.title}</h3>
 
