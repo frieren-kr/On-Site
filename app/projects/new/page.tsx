@@ -23,14 +23,14 @@ export default async function NewProjectPage() {
         <div className="mb-6">
           <Link
             href="/dashboard"
-            className="text-sm text-gray-600 hover:underline"
+            className="text-sm text-ink-muted hover:underline"
           >
             ← 대시보드로
           </Link>
         </div>
 
         <div className="rounded-lg bg-card p-8 shadow">
-          <h1 className="mb-6 text-2xl font-bold text-gray-900">
+          <h1 className="mb-6 text-2xl font-bold text-ink">
             새 프로젝트
           </h1>
 

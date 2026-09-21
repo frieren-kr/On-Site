@@ -44,7 +44,7 @@ export default function DeleteAccountSection({
   if (!showConfirm) {
     return (
       <div>
-        <p className="mb-4 text-sm text-gray-600">
+        <p className="mb-4 text-sm text-ink-muted">
           탈퇴하면 계정과 관련된 모든 데이터가 삭제되며 복구할 수 없어요.
         </p>
         <button
@@ -87,10 +87,10 @@ export default function DeleteAccountSection({
       {/* 삭제될 프로젝트 목록 */}
       {hasImpact && (
         <div className="rounded border p-3 text-sm">
-          <p className="mb-2 font-medium text-gray-900">
+          <p className="mb-2 font-medium text-ink">
             삭제될 프로젝트:
           </p>
-          <ul className="space-y-1 text-gray-600">
+          <ul className="space-y-1 text-ink-muted">
             {impact.ownedProjects.map((p) => (
               <li key={p.id}>
                 • {p.title} (참여자 {p.memberCount}명)
@@ -102,7 +102,7 @@ export default function DeleteAccountSection({
 
       {/* 확인 텍스트 입력 */}
       <div>
-        <label className="mb-1 block text-sm text-gray-700">
+        <label className="mb-1 block text-sm text-ink-muted">
           탈퇴하려면 아래에 <strong>탈퇴합니다</strong>를 입력하세요.
         </label>
         <input
@@ -110,7 +110,7 @@ export default function DeleteAccountSection({
           value={confirmText}
           onChange={(e) => setConfirmText(e.target.value)}
           placeholder="탈퇴합니다"
-          className="w-full rounded border px-3 py-2 text-sm text-gray-900"
+          className="w-full rounded border px-3 py-2 text-sm text-ink"
         />
       </div>
 
@@ -129,7 +129,7 @@ export default function DeleteAccountSection({
             setError(null);
           }}
           disabled={isPending}
-          className="rounded border px-4 py-2 text-sm text-gray-700 disabled:opacity-50"
+          className="rounded border px-4 py-2 text-sm text-ink-muted disabled:opacity-50"
         >
           취소
         </button>

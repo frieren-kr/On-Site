@@ -54,10 +54,10 @@ export default function SignUpForm() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface">
       <div className="w-full max-w-md rounded-lg bg-card p-8 shadow">
-        <h1 className="mb-2 text-2xl font-bold text-gray-900">회원가입</h1>
+        <h1 className="mb-2 text-2xl font-bold text-ink">회원가입</h1>
 
         {isInviteFlow && (
-          <p className="mb-6 text-sm text-blue-800">
+          <p className="mb-6 text-sm text-ink-muted">
             초대받은 프로젝트에 참여하려면 계정을 만들어주세요.
           </p>
         )}
@@ -66,7 +66,7 @@ export default function SignUpForm() {
           {/* 초대 흐름에선 역할 선택 숨김 (자동 참여자) */}
           {!isInviteFlow && (
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-900">
+              <label className="mb-2 block text-sm font-medium text-ink">
                 어떻게 서비스를 이용하실 건가요?
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -93,7 +93,7 @@ export default function SignUpForm() {
                   주최자
                 </button>
               </div>
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-ink-muted">
                 {role === "PARTICIPANT"
                   ? "초대받은 프로젝트의 일정·해설을 보고 참여합니다"
                   : "프로젝트를 기획하고 참여자를 초대합니다"}
@@ -102,7 +102,7 @@ export default function SignUpForm() {
           )}
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-900">
+            <label className="mb-1 block text-sm font-medium text-ink">
               이름
             </label>
             <input
@@ -110,12 +110,12 @@ export default function SignUpForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full rounded border px-3 py-2 text-gray-900"
+              className="w-full rounded border px-3 py-2 text-ink"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-900">
+            <label className="mb-1 block text-sm font-medium text-ink">
               이메일
             </label>
             <input
@@ -124,17 +124,17 @@ export default function SignUpForm() {
               onChange={(e) => setEmail(e.target.value)}
               required
               readOnly={!!invitedEmail}
-              className="w-full rounded border px-3 py-2 text-gray-900 read-only:bg-gray-100"
+              className="w-full rounded border px-3 py-2 text-ink read-only:bg-panel"
             />
             {invitedEmail && (
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-ink-muted">
                 초대받은 이메일 주소예요.
               </p>
             )}
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-900">
+            <label className="mb-1 block text-sm font-medium text-ink">
               비밀번호 (8자 이상)
             </label>
             <input
@@ -143,7 +143,7 @@ export default function SignUpForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full rounded border px-3 py-2 text-gray-900"
+              className="w-full rounded border px-3 py-2 text-ink"
             />
           </div>
 
@@ -162,13 +162,13 @@ export default function SignUpForm() {
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-700">
+        <p className="mt-4 text-center text-sm text-ink-muted">
           이미 계정이 있어요?{" "}
           <a
             href={
               inviteToken ? `/sign-in?invite=${inviteToken}` : "/sign-in"
             }
-            className="text-blue-600 underline"
+            className="text-link underline"
           >
             로그인
           </a>

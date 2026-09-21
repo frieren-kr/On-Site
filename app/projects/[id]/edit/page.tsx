@@ -29,13 +29,13 @@ export default async function EditProjectPage({
       <div className="mx-auto max-w-2xl px-4">
         <Link
           href={`/projects/${id}`}
-          className="mb-4 inline-block text-sm text-gray-600 hover:underline"
+          className="mb-4 inline-block text-sm text-ink-muted hover:underline"
         >
           ← 프로젝트로
         </Link>
 
         <div className="rounded-lg bg-card p-8 shadow">
-          <h1 className="mb-6 text-2xl font-bold text-gray-900">
+          <h1 className="mb-6 text-2xl font-bold text-ink">
             프로젝트 수정
           </h1>
 

@@ -13,6 +13,21 @@ declare global {
   }
 }
 
+// 지도 Polyline은 캔버스/SVG로 그려져 인라인 style의 CSS var()를 못 읽는다.
+// :root에 정의된 팔레트 토큰 값을 런타임에 읽어 hex 하드코딩 없이 strokeColor로 넘긴다.
+// (마커는 DOM 요소라 var()가 그대로 동작하므로 이 함수가 필요 없다.)
+function cssToken(name: string): string {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  if (!value) {
+    console.warn(
+      `[ProjectMap] CSS 토큰 "${name}" 값이 비어 있습니다 — globals.css의 :root 정의를 확인하세요.`
+    );
+  }
+  return value;
+}
+
 // 일정 순서대로 정렬된 장소 (마커용)
 interface RouteStop {
   siteId: string;
@@ -77,11 +92,11 @@ export default function ProjectMap({
           content: `
             <div style="
               width: 32px; height: 32px;
-              background: #111827; color: white;
+              background: var(--color-ink); color: var(--color-card);
               border-radius: 50%;
               display: flex; align-items: center; justify-content: center;
               font-weight: bold; font-size: 14px;
-              border: 2px solid white;
+              border: 2px solid var(--color-card);
               box-shadow: 0 2px 4px rgba(0,0,0,0.3);
             ">${index + 1}</div>
           `,
@@ -99,7 +114,7 @@ export default function ProjectMap({
       new window.naver.maps.Polyline({
         map,
         path,
-        strokeColor: "#3b82f6",
+        strokeColor: cssToken("--color-map-route"),
         strokeWeight: 5,
         strokeOpacity: 0.8,
       });
@@ -110,7 +125,7 @@ export default function ProjectMap({
       new window.naver.maps.Polyline({
         map,
         path,
-        strokeColor: "#9ca3af",
+        strokeColor: cssToken("--color-ink-faint"),
         strokeWeight: 2,
         strokeOpacity: 0.5,
         strokeStyle: "shortdash",
@@ -147,10 +162,10 @@ export default function ProjectMap({
         content: `
           <div style="
             width: 20px; height: 20px;
-            background: #2563eb;
+            background: var(--color-map-me);
             border-radius: 50%;
             border: 3px solid white;
-            box-shadow: 0 0 0 2px #2563eb, 0 2px 6px rgba(0,0,0,0.4);
+            box-shadow: 0 0 0 2px var(--color-map-me), 0 2px 6px rgba(0,0,0,0.4);
           "></div>
         `,
         anchor: new window.naver.maps.Point(10, 10),
@@ -186,7 +201,7 @@ export default function ProjectMap({
 
   if (stops.length === 0) {
     return (
-      <div className="rounded border bg-panel p-8 text-center text-sm text-gray-500">
+      <div className="rounded border bg-panel p-8 text-center text-sm text-ink-muted">
         이 날짜에는 장소가 연결된 일정이 없어요.
       </div>
     );
@@ -211,7 +226,7 @@ export default function ProjectMap({
           <span className="text-base">📍</span>
           {locating ? "위치 확인 중..." : "내 위치"}
         </button>
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-ink-muted">
           버튼을 누르면 현재 위치가 표시됩니다
         </span>
       </div>

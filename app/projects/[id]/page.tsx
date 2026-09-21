@@ -110,7 +110,7 @@ export default async function ProjectPage({
       <div className="mx-auto max-w-5xl px-4">
         <Link
           href="/dashboard"
-          className="mb-4 inline-block text-sm text-gray-600 hover:underline"
+          className="mb-4 inline-block text-sm text-ink-muted hover:underline"
         >
           ← 대시보드
         </Link>
@@ -120,19 +120,19 @@ export default async function ProjectPage({
           <div className="mb-3 flex items-start justify-between gap-2">
             <div>
               <div className="mb-2 flex items-center gap-2">
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold text-ink">
                   {project.title}
                 </h1>
                 
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-ink-muted">
                 {project.organizer.name} 님이 준비했어요
               </p>
             </div>
             {canEdit && (
               <Link
                 href={`/projects/${project.id}/edit`}
-                className="shrink-0 rounded border px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+                className="shrink-0 rounded border px-3 py-1 text-sm text-ink-muted hover:bg-panel"
               >
                 수정
               </Link>
@@ -140,13 +140,13 @@ export default async function ProjectPage({
           </div>
 
           {project.description && (
-            <p className="mb-3 whitespace-pre-line text-sm text-gray-700">
+            <p className="mb-3 whitespace-pre-line text-sm text-ink-muted">
               {project.description}
             </p>
           )}
 
           {(project.startDate || project.endDate) && (
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-muted">
               {project.startDate && (
                 <span>시작: {formatDate(project.startDate)}</span>
               )}
@@ -161,7 +161,7 @@ export default async function ProjectPage({
 
         {/* 좁은 화면 주최자용 안내 (모바일에서만) */}
         {canEdit && (
-          <p className="mb-4 rounded bg-panel p-3 text-xs text-gray-500 sm:hidden">
+          <p className="mb-4 rounded bg-panel p-3 text-xs text-ink-muted sm:hidden">
             편집은 PC 환경에서 하시는 걸 권장해요.
           </p>
         )}

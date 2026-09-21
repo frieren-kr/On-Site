@@ -62,15 +62,15 @@ export default function RouteControl({
         <div>
           {hasRoute ? (
             <div className="flex gap-4 text-sm">
-              <span className="text-gray-900">
+              <span className="text-ink">
                 총 이동거리 <strong>{distanceText}</strong>
               </span>
-              <span className="text-gray-900">
+              <span className="text-ink">
                 예상 소요 <strong>{durationText}</strong>
               </span>
             </div>
           ) : (
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-ink-muted">
               아직 경로가 계산되지 않았어요
             </span>
           )}
@@ -94,14 +94,14 @@ export default function RouteControl({
 
       {/* 낡음 경고 */}
       {canEdit && routeIsStale && hasRoute && (
-        <div className="mt-2 rounded bg-yellow-50 p-2 text-xs text-yellow-800">
+        <div className="mt-2 rounded border border-warning-border bg-warning-tint p-2 text-xs text-warning-ink">
           장소가 변경됐어요. 경로를 다시 계산해주세요.
         </div>
       )}
 
       {/* 차량 이동 안내 (참여자용) */}
       {hasRoute && (
-        <p className="mt-2 text-xs text-gray-500">
+        <p className="mt-2 text-xs text-ink-muted">
           차량 이동 기준 예상치입니다. 실제 교통상황에 따라 달라질 수 있어요.
         </p>
         

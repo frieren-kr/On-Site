@@ -10,8 +10,8 @@ export default async function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface">
       <div className="w-full max-w-md rounded-lg bg-card p-8 shadow">
-        <h1 className="mb-2 text-2xl text-black font-bold">OnSite</h1>
-        <p className="mb-6 text-sm leading-relaxed text-gray-600">
+        <h1 className="mb-2 text-2xl text-ink font-bold">OnSite</h1>
+        <p className="mb-6 text-sm leading-relaxed text-ink-muted">
           OnSite — 장소·일정·동선을 한곳에서 관리하고, 참여자가 모바일에서 바로
           확인할 수 있는 웹 서비스
         </p>

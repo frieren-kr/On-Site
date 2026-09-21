@@ -42,17 +42,17 @@ export default function SignInForm() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface">
       <div className="w-full max-w-md rounded-lg bg-card p-8 shadow">
-        <h1 className="mb-2 text-2xl text-black font-bold">로그인</h1>
+        <h1 className="mb-2 text-2xl text-ink font-bold">로그인</h1>
 
         {inviteToken && (
-          <p className="mb-4 text-sm text-blue-800">
+          <p className="mb-4 text-sm text-ink-muted">
             로그인 후 초대받은 프로젝트 페이지로 이동해요.
           </p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm text-black font-medium">
+            <label className="mb-1 block text-sm text-ink font-medium">
               이메일
             </label>
             <input
@@ -65,7 +65,7 @@ export default function SignInForm() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm text-black font-medium">
+            <label className="mb-1 block text-sm text-ink font-medium">
               비밀번호
             </label>
             <input
@@ -92,13 +92,13 @@ export default function SignInForm() {
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-black">
+        <p className="mt-4 text-center text-sm text-ink">
           처음이신가요?{" "}
           <a
             href={
               inviteToken ? `/sign-up?invite=${inviteToken}` : "/sign-up"
             }
-            className="text-blue-600 underline"
+            className="text-link underline"
           >
             회원가입
           </a>

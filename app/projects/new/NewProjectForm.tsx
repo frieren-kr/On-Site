@@ -16,7 +16,7 @@ export default function NewProjectForm() {
       )}
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-900">
+        <label className="mb-1 block text-sm font-medium text-ink">
           프로젝트 제목 <span className="text-red-500">*</span>
         </label>
         <input
@@ -25,12 +25,12 @@ export default function NewProjectForm() {
           required
           maxLength={100}
           placeholder="예: 2026 봄 경주 워크숍"
-          className="w-full rounded border px-3 py-2 text-gray-900"
+          className="w-full rounded border px-3 py-2 text-ink"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-900">
+        <label className="mb-1 block text-sm font-medium text-ink">
           프로젝트 개요
         </label>
         <textarea
@@ -38,41 +38,41 @@ export default function NewProjectForm() {
           rows={4}
           maxLength={1000}
           placeholder="프로젝트 목적, 주제 등을 간단히 적어주세요"
-          className="w-full rounded border px-3 py-2 text-gray-900"
+          className="w-full rounded border px-3 py-2 text-ink"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">
+          <label className="mb-1 block text-sm font-medium text-ink">
             시작일
           </label>
           <input
             name="startDate"
             type="date"
-            className="w-full rounded border px-3 py-2 text-gray-900"
+            className="w-full rounded border px-3 py-2 text-ink"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">
+          <label className="mb-1 block text-sm font-medium text-ink">
             종료일
           </label>
           <input
             name="endDate"
             type="date"
-            className="w-full rounded border px-3 py-2 text-gray-900"
+            className="w-full rounded border px-3 py-2 text-ink"
           />
         </div>
       </div>
 
-      <div className="rounded bg-blue-50 p-3 text-sm text-blue-900">
+      <div className="rounded border border-border bg-panel p-3 text-sm text-ink-muted">
         프로젝트를 만든 뒤 장소·일정·해설을 추가하고 참여자를 초대할 수 있어요.
       </div>
 
       <div className="flex gap-2 pt-2">
         <Link
           href="/dashboard"
-          className="rounded border px-4 py-2 text-sm text-gray-700"
+          className="rounded border px-4 py-2 text-sm text-ink-muted"
         >
           취소
         </Link>

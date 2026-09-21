@@ -118,7 +118,7 @@ export default function RouteView({
 
   if (stops.length === 0) {
     return (
-      <div className="rounded border bg-panel p-6 text-center text-sm text-gray-500">
+      <div className="rounded border bg-panel p-6 text-center text-sm text-ink-muted">
         장소가 연결된 일정이 없어요. 일정에 장소를 연결하면 동선이
         표시됩니다.
       </div>
@@ -129,7 +129,7 @@ export default function RouteView({
     <div>
       {/* 경로 계산 버튼 + 낡음 안내 */}
       <div className="mb-3 flex items-center justify-between">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-ink-muted">
           {routeData
             ? "날짜별 이동 경로입니다. 차량 이동 기준 예상치입니다."
             : "아직 경로가 계산되지 않았어요."}
@@ -151,7 +151,7 @@ export default function RouteView({
       </div>
 
       {canEdit && routeIsStale && routeData && (
-        <div className="mb-3 rounded bg-yellow-50 p-2 text-xs text-yellow-800">
+        <div className="mb-3 rounded border border-warning-border bg-warning-tint p-2 text-xs text-warning-ink">
           일정이나 장소가 변경됐어요. 경로를 다시 계산해주세요.
         </div>
       )}
@@ -165,8 +165,8 @@ export default function RouteView({
       {/* 근접 배너: 위치를 잡기 전(myCoords 없음)에는 아무것도 보이지 않는다 */}
       {myCoords &&
         (nearbyStops.length > 0 ? (
-          <div className="mb-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
-            <p className="mb-2 text-sm font-medium text-blue-900">
+          <div className="mb-3 rounded-lg border border-secondary bg-secondary-tint p-3">
+            <p className="mb-2 text-sm font-medium text-secondary-ink">
               📍 현재 위치에서 {NEARBY_RADIUS_M}m 안에 장소{" "}
               {nearbyStops.length}곳이 있어요
             </p>
@@ -174,22 +174,22 @@ export default function RouteView({
               {nearbyStops.map((s) => (
                 <li
                   key={s.siteId}
-                  className="flex items-center justify-between text-sm text-blue-900"
+                  className="flex items-center justify-between text-sm text-secondary-ink"
                 >
                   {/* organizer는 항상 링크, 참여자는 해설이 있을 때만 */}
                   {canEdit || s.hasDescription ? (
                     <Link
                       href={`/projects/${projectId}/sites/${s.siteId}`}
-                      className="flex-1 truncate text-link underline hover:text-blue-800"
+                      className="flex-1 truncate text-link underline hover:text-secondary-ink"
                     >
                       {s.name}
                     </Link>
                   ) : (
-                    <span className="flex-1 truncate text-gray-900">
+                    <span className="flex-1 truncate text-secondary-ink">
                       {s.name}
                     </span>
                   )}
-                  <span className="ml-2 shrink-0 font-medium text-blue-700">
+                  <span className="ml-2 shrink-0 font-medium text-secondary-ink">
                     {Math.round(s.distance)}m
                   </span>
                 </li>
@@ -197,7 +197,7 @@ export default function RouteView({
             </ul>
           </div>
         ) : (
-          <div className="mb-3 rounded-lg border border-gray-200 bg-panel p-3 text-sm text-gray-600">
+          <div className="mb-3 rounded-lg border border-border bg-panel p-3 text-sm text-ink-muted">
             📍 현재 위치에서 {NEARBY_RADIUS_M}m 근처에 장소가 없어요
           </div>
         ))}
@@ -205,27 +205,27 @@ export default function RouteView({
       {/* 선택 날짜의 거리·시간 */}
       {activeRoute && (
         <div className="mb-3 flex gap-4 text-sm">
-          <span className="text-gray-900">
+          <span className="text-ink">
             이동거리 <strong>{fmtDistance(activeRoute.distance)}</strong>
           </span>
-          <span className="text-gray-900">
+          <span className="text-ink">
             예상 소요 <strong>{fmtDuration(activeRoute.duration)}</strong>
           </span>
         </div>
       )}
       {activeRoute && activeRoute.legs && activeRoute.legs.length > 0 && (
-        <div className="mb-3 rounded border border-gray-200 bg-panel p-3">
-          <p className="mb-2 text-xs font-medium text-gray-700">구간별 이동</p>
+        <div className="mb-3 rounded border border-border bg-panel p-3">
+          <p className="mb-2 text-xs font-medium text-ink-muted">구간별 이동</p>
           <ul className="space-y-1">
             {activeRoute.legs.map((leg, i) => (
               <li
                 key={i}
-                className="flex items-center justify-between text-xs text-gray-600"
+                className="flex items-center justify-between text-xs text-ink-muted"
               >
                 <span className="flex-1 truncate">
                   {i + 1}.{leg.fromName} → {leg.toName}
                 </span>
-                <span className="ml-2 shrink-0 text-gray-500">
+                <span className="ml-2 shrink-0 text-ink-muted">
                   {fmtDistance(leg.distance)} · {fmtDuration(leg.duration)}
                 </span>
                </li>
@@ -244,7 +244,7 @@ export default function RouteView({
       />
 
       {activeRoute && (
-        <p className="mt-2 text-xs text-gray-500">
+        <p className="mt-2 text-xs text-ink-muted">
           차량 이동 기준 예상치입니다. 실제 교통상황에 따라 달라질 수 있어요.
         </p>
       )}

@@ -75,7 +75,7 @@ export default function EditProjectForm({ project }: { project: Project }) {
   return (
     <form onSubmit={handleUpdate} className="space-y-4">
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-900">
+        <label className="mb-1 block text-sm font-medium text-ink">
           프로젝트 제목 <span className="text-red-500">*</span>
         </label>
         <input
@@ -84,12 +84,12 @@ export default function EditProjectForm({ project }: { project: Project }) {
           onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={100}
-          className="w-full rounded border px-3 py-2 text-gray-900"
+          className="w-full rounded border px-3 py-2 text-ink"
         />
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-900">
+        <label className="mb-1 block text-sm font-medium text-ink">
           프로젝트 개요
         </label>
         <textarea
@@ -97,31 +97,31 @@ export default function EditProjectForm({ project }: { project: Project }) {
           onChange={(e) => setDescription(e.target.value)}
           rows={4}
           maxLength={1000}
-          className="w-full rounded border px-3 py-2 text-gray-900"
+          className="w-full rounded border px-3 py-2 text-ink"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">
+          <label className="mb-1 block text-sm font-medium text-ink">
             시작일
           </label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-gray-900"
+            className="w-full rounded border px-3 py-2 text-ink"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">
+          <label className="mb-1 block text-sm font-medium text-ink">
             종료일
           </label>
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-gray-900"
+            className="w-full rounded border px-3 py-2 text-ink"
           />
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function EditProjectForm({ project }: { project: Project }) {
           <button
             type="button"
             onClick={() => router.push(`/projects/${project.id}`)}
-            className="rounded border px-4 py-2 text-sm text-gray-700"
+            className="rounded border px-4 py-2 text-sm text-ink-muted"
           >
             취소
           </button>

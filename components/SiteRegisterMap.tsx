@@ -39,11 +39,11 @@ function registeredMarkerContent(num: number): string {
   return `
     <div style="
       width: 28px; height: 28px;
-      background: #64748b; color: white;
+      background: var(--color-ink); color: var(--color-card);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-weight: bold; font-size: 13px;
-      border: 2px solid white;
+      border: 2px solid var(--color-card);
       box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     ">${num}</div>
   `;
@@ -55,8 +55,8 @@ const PICKED_MARKER_CONTENT = `
   <svg width="24" height="30" viewBox="0 0 24 30" xmlns="http://www.w3.org/2000/svg"
        style="display:block; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));">
     <path d="M12 0 C5.373 0 0 5.373 0 12 C0 20 12 28 12 28 C12 28 24 20 24 12 C24 5.373 18.627 0 12 0 Z"
-          fill="#ef4444" stroke="#ffffff" stroke-width="1.5" />
-    <circle cx="12" cy="12" r="4.5" fill="#ffffff" />
+          style="fill: var(--color-map-pin); stroke: var(--color-card);" stroke-width="1.5" />
+    <circle cx="12" cy="12" r="4.5" style="fill: var(--color-card);" />
   </svg>
 `;
 // 핀의 뾰족한 하단 끝 = anchor. 중앙이 아니라 이 끝이 좌표를 정확히 가리킨다.
@@ -292,7 +292,7 @@ export default function SiteRegisterMap({
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder="주소로 검색 (예: 경복궁 ~> 사직로 161)"
-            className="flex-1 rounded border px-3 py-2 text-gray-900"
+            className="flex-1 rounded border px-3 py-2 text-ink"
           />
           <button
             type="button"
@@ -311,7 +311,7 @@ export default function SiteRegisterMap({
         )}
 
         {/* 지도 */}
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-ink-muted">
             주소로 검색이 어려운 곳은 지도를 직접 클릭해서 좌표를 지정할 수 있어요.
         </p>
         <div
@@ -323,15 +323,15 @@ export default function SiteRegisterMap({
         {/* 검색 결과 표시 + 저장 폼 */}
         {searchResult && (
           <div className="rounded border bg-panel p-4">
-            <p className="mb-1 text-xs text-gray-500">
+            <p className="mb-1 text-xs text-ink-muted">
               위도 {searchResult.latitude.toFixed(6)} · 경도{" "}
               {searchResult.longitude.toFixed(6)}
             </p>
-            <p className="mb-3 text-sm text-gray-700">
+            <p className="mb-3 text-sm text-ink-muted">
               주소: {searchResult.address}
             </p>
 
-            <label className="mb-1 block text-sm font-medium text-gray-900">
+            <label className="mb-1 block text-sm font-medium text-ink">
               장소 이름 <span className="text-red-500">*</span>
             </label>
             <input
@@ -339,7 +339,7 @@ export default function SiteRegisterMap({
               value={siteName}
               onChange={(e) => setSiteName(e.target.value)}
               maxLength={100}
-              className="mb-3 w-full rounded border px-3 py-2 text-gray-900"
+              className="mb-3 w-full rounded border px-3 py-2 text-ink"
               placeholder="예: 근정전, 광화문"
             />
 

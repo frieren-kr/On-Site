@@ -16,25 +16,25 @@ export default async function SettingsPage() {
       <div className="mx-auto max-w-2xl px-4">
         <Link
           href="/dashboard"
-          className="mb-4 inline-block text-sm text-gray-600 hover:underline"
+          className="mb-4 inline-block text-sm text-ink-muted hover:underline"
         >
           ← 대시보드
         </Link>
 
         <div className="mb-6 rounded-lg bg-card p-6 shadow">
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">설정</h1>
+          <h1 className="mb-4 text-2xl font-bold text-ink">설정</h1>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between border-b pb-2">
-              <span className="text-gray-500">이름</span>
-              <span className="text-gray-900">{session.user.name}</span>
+              <span className="text-ink-muted">이름</span>
+              <span className="text-ink">{session.user.name}</span>
             </div>
             <div className="flex justify-between border-b pb-2">
-              <span className="text-gray-500">이메일</span>
-              <span className="text-gray-900">{session.user.email}</span>
+              <span className="text-ink-muted">이메일</span>
+              <span className="text-ink">{session.user.email}</span>
             </div>
             <div className="flex justify-between pb-2">
-              <span className="text-gray-500">역할</span>
-              <span className="text-gray-900">
+              <span className="text-ink-muted">역할</span>
+              <span className="text-ink">
                 {session.user.role === "ORGANIZER"
                   ? "주최자"
                   : session.user.role === "PARTICIPANT"
@@ -47,8 +47,8 @@ export default async function SettingsPage() {
 
         {/* 로그아웃 */}
         <div className="mb-6 rounded-lg bg-card p-6 shadow">
-          <h2 className="mb-2 text-lg font-semibold text-gray-900">로그아웃</h2>
-          <p className="mb-4 text-sm text-gray-600">
+          <h2 className="mb-2 text-lg font-semibold text-ink">로그아웃</h2>
+          <p className="mb-4 text-sm text-ink-muted">
             이 기기에서 로그아웃해요. 계정과 데이터는 그대로 유지돼요.
           </p>
           <SignOutButton />

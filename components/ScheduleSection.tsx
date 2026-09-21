@@ -77,7 +77,7 @@ export default function ScheduleSection({
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">
+        <h2 className="text-lg font-semibold text-ink">
           일정 ({schedules.length})
         </h2>
         {canEdit && !isAdding && !editingId && (
@@ -115,7 +115,7 @@ export default function ScheduleSection({
       )}
 
       {schedules.length === 0 ? (
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-ink-muted">
           {canEdit
             ? "일정을 추가하면 여기에 표시돼요."
             : "아직 등록된 일정이 없어요."}
@@ -154,13 +154,13 @@ export default function ScheduleSection({
               return (
                 <li
                   key={schedule.id}
-                  className="flex items-center gap-3 rounded border border-gray-200 p-3"
+                  className="flex items-center gap-3 rounded border border-border p-3"
                 >
-                  <div className="w-24 shrink-0 text-xs text-gray-500">
+                  <div className="w-24 shrink-0 text-xs text-ink-muted">
                     {schedule.startTime} – {schedule.endTime}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-ink">
                       {schedule.title}
                     </p>
                     {/* organizer는 항상 링크, 참여자는 해설이 있을 때만 */}
@@ -169,12 +169,12 @@ export default function ScheduleSection({
                       hasDescriptionBySiteId.get(schedule.site.id) ? (
                         <Link
                           href={`/projects/${projectId}/sites/${schedule.site.id}`}
-                          className="text-xs text-link underline hover:text-blue-800"
+                          className="text-xs text-link underline hover:text-secondary-ink"
                         >
                           → {schedule.site.name}
                         </Link>
                       ) : (
-                        <span className="text-xs text-gray-900">
+                        <span className="text-xs text-ink">
                           → {schedule.site.name}
                         </span>
                       ))}
@@ -188,7 +188,7 @@ export default function ScheduleSection({
                           setError(null);
                         }}
                         disabled={isPending || isAdding}
-                        className="rounded border px-2 py-1 text-xs text-gray-700 disabled:opacity-30"
+                        className="rounded border px-2 py-1 text-xs text-ink-muted disabled:opacity-30"
                       >
                         수정
                       </button>
@@ -301,10 +301,10 @@ function ScheduleForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-3 space-y-3 rounded border border-gray-300 bg-panel p-4"
+      className="mb-3 space-y-3 rounded border border-border bg-panel p-4"
     >
       <div>
-        <label className="mb-1 block text-xs font-medium text-gray-900">
+        <label className="mb-1 block text-xs font-medium text-ink">
           제목 <span className="text-red-500">*</span>
         </label>
         <input
@@ -314,13 +314,13 @@ function ScheduleForm({
           required
           maxLength={100}
           placeholder="예: 근정전 관람, 점심 식사, 버스 이동"
-          className="w-full rounded border px-3 py-2 text-sm text-gray-900"
+          className="w-full rounded border px-3 py-2 text-sm text-ink"
         />
       </div>
 
       <div className="grid grid-cols-3 gap-2">
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-900">
+          <label className="mb-1 block text-xs font-medium text-ink">
             날짜 <span className="text-red-500">*</span>
           </label>
           <input
@@ -328,11 +328,11 @@ function ScheduleForm({
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            className="w-full rounded border px-2 py-2 text-sm text-gray-900"
+            className="w-full rounded border px-2 py-2 text-sm text-ink"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-900">
+          <label className="mb-1 block text-xs font-medium text-ink">
             시작 <span className="text-red-500">*</span>
           </label>
           <input
@@ -340,11 +340,11 @@ function ScheduleForm({
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
             required
-            className="w-full rounded border px-2 py-2 text-sm text-gray-900"
+            className="w-full rounded border px-2 py-2 text-sm text-ink"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-900">
+          <label className="mb-1 block text-xs font-medium text-ink">
             종료 <span className="text-red-500">*</span>
           </label>
           <input
@@ -352,19 +352,19 @@ function ScheduleForm({
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
             required
-            className="w-full rounded border px-2 py-2 text-sm text-gray-900"
+            className="w-full rounded border px-2 py-2 text-sm text-ink"
           />
         </div>
       </div>
 
       <div>
-        <label className="mb-1 block text-xs font-medium text-gray-900">
+        <label className="mb-1 block text-xs font-medium text-ink">
           연결할 장소 (선택)
         </label>
         <select
           value={siteId}
           onChange={(e) => setSiteId(e.target.value)}
-          className="w-full rounded border px-3 py-2 text-sm text-gray-900"
+          className="w-full rounded border px-3 py-2 text-sm text-ink"
         >
           <option value="">장소 없음 (자유 일정)</option>
           {sites.map((site) => (
@@ -380,7 +380,7 @@ function ScheduleForm({
           type="button"
           onClick={onDone}
           disabled={isPending}
-          className="rounded border px-3 py-1 text-sm text-gray-700 disabled:opacity-50"
+          className="rounded border px-3 py-1 text-sm text-ink-muted disabled:opacity-50"
         >
           취소
         </button>

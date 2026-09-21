@@ -39,7 +39,7 @@ export default async function SitePage({
       <div className="mx-auto max-w-3xl px-4">
         <Link
           href={`/projects/${projectId}`}
-          className="mb-4 inline-block text-sm text-gray-600 hover:underline"
+          className="mb-4 inline-block text-sm text-ink-muted hover:underline"
         >
           ← {site.project.title}
         </Link>

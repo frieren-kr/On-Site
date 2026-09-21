@@ -65,7 +65,7 @@ export default function ImageUploadButton({
   return (
     <div className="flex items-center gap-2">
       <label
-        className={`cursor-pointer whitespace-nowrap rounded border px-2 py-1 text-xs text-gray-700 hover:bg-gray-50 ${
+        className={`cursor-pointer whitespace-nowrap rounded border px-2 py-1 text-xs text-ink-muted hover:bg-panel ${
           isDisabled ? "pointer-events-none opacity-50" : ""
         }`}
       >

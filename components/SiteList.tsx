@@ -69,7 +69,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
 
   if (sites.length === 0) {
     return (
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-ink-muted">
         {canEdit
           ? "위에서 첫 장소를 검색해 추가해보세요."
           : "아직 등록된 장소가 없어요."}
@@ -99,15 +99,15 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
                 className={
                   site.hasDescription
                     ? "font-medium text-link underline"
-                    : "font-medium text-gray-900"
+                    : "font-medium text-ink"
                 }
               >
                 {site.name}
               </h3>
               {site.address && (
-                <p className="text-xs text-gray-500">{site.address}</p>
+                <p className="text-xs text-ink-muted">{site.address}</p>
               )}
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-ink-faint">
                 {site.latitude.toFixed(6)}, {site.longitude.toFixed(6)}
               </p>
             </>
@@ -118,7 +118,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
               key={site.id}
               className="flex items-start gap-3 rounded border p-3"
             >
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gray-900 text-xs text-white">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ink text-xs text-card">
                 {index + 1}
               </span>
 
@@ -128,21 +128,21 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
                   {/* organizer는 해설 유무와 무관하게 항상 링크 */}
                   <Link
                     href={`/projects/${projectId}/sites/${site.id}`}
-                    className="font-medium text-link underline hover:text-blue-800"
+                    className="font-medium text-link underline hover:text-secondary-ink"
                   >
                     {site.name}
                   </Link>
                   {site.address && (
-                    <p className="text-xs text-gray-500">{site.address}</p>
+                    <p className="text-xs text-ink-muted">{site.address}</p>
                   )}
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-ink-faint">
                     {site.latitude.toFixed(6)}, {site.longitude.toFixed(6)}
                   </p>
                 </div>
               ) : site.hasDescription ? (
                 <Link
                   href={`/projects/${projectId}/sites/${site.id}`}
-                  className="flex-1 rounded hover:bg-gray-50"
+                  className="flex-1 rounded hover:bg-panel"
                 >
                   {siteInfo}
                 </Link>
@@ -158,7 +158,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
                     type="button"
                     onClick={() => handleReorder(site.id, "up")}
                     disabled={isFirst || isPending}
-                    className="rounded border px-2 py-1 text-xs text-gray-700 disabled:opacity-30"
+                    className="rounded border px-2 py-1 text-xs text-ink-muted disabled:opacity-30"
                     title="위로"
                   >
                     ↑
@@ -167,7 +167,7 @@ export default function SiteList({ sites, projectId, canEdit }: SiteListProps) {
                     type="button"
                     onClick={() => handleReorder(site.id, "down")}
                     disabled={isLast || isPending}
-                    className="rounded border px-2 py-1 text-xs text-gray-700 disabled:opacity-30"
+                    className="rounded border px-2 py-1 text-xs text-ink-muted disabled:opacity-30"
                     title="아래로"
                   >
                     ↓

@@ -128,25 +128,25 @@ export default function ProjectTabs({
   const topTabClass = (active: boolean) =>
     `whitespace-nowrap border-b-2 px-4 py-3 text-base font-semibold ${
       active
-        ? "border-accent text-gray-900"
-        : "border-transparent text-gray-500 hover:text-gray-800"
+        ? "border-accent text-ink"
+        : "border-transparent text-ink-muted"
     }`;
 
   const subTabClass = (active: boolean) =>
     `border-b-2 py-2 text-sm ${
       active
-        ? "border-accent font-medium text-gray-900"
-        : "border-transparent text-gray-400 hover:text-gray-700"
+        ? "border-accent font-medium text-ink"
+        : "border-transparent text-ink-muted hover:text-ink-muted"
     }`;
 
   return (
     <div className="mb-6 rounded-lg bg-card shadow">
       {/* 상단 탭 바: 왼쪽 날짜(가로 스크롤) / 오른쪽 장소(고정) — 서로 다른 축 */}
-      <div className="flex items-stretch border-b border-gray-200">
+      <div className="flex items-stretch border-b border-border">
         <div className="flex-1 overflow-x-auto">
           <div className="flex">
             {dateKeys.length === 0 ? (
-              <span className="whitespace-nowrap px-4 py-3 text-base font-semibold text-gray-300">
+              <span className="whitespace-nowrap px-4 py-3 text-base font-semibold text-ink-faint">
                 날짜 없음
               </span>
             ) : (
@@ -167,7 +167,7 @@ export default function ProjectTabs({
         </div>
 
         {/* 구분선(border-l) + 스크롤 영역 밖 고정 */}
-        <div className="flex shrink-0 border-l border-gray-200">
+        <div className="flex shrink-0 border-l border-border">
           <button
             type="button"
             onClick={() => setTopTab("site")}
@@ -180,7 +180,7 @@ export default function ProjectTabs({
 
       {/* 하위 탭 바: 날짜 모드일 때만, 상위보다 작게 */}
       {topTab === "date" && (
-        <div className="flex gap-4 border-b border-gray-100 px-4">
+        <div className="flex gap-4 border-b border-border px-4">
           <button
             type="button"
             onClick={() => setSubTab("route")}
@@ -205,7 +205,7 @@ export default function ProjectTabs({
             {/* organizer는 장소 추가 UI를 목록 위에 먼저 본다 */}
             {canEdit && (
               <div className="mb-6">
-                <h2 className="mb-4 text-lg font-semibold text-gray-900">
+                <h2 className="mb-4 text-lg font-semibold text-ink">
                   장소 추가
                 </h2>
                 <SiteRegisterMap projectId={projectId} sites={sites} />
@@ -213,10 +213,10 @@ export default function ProjectTabs({
             )}
 
             <div className="mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-ink">
                 장소 목록 ({sites.length})
               </h2>
-              <p className="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-ink-muted">
                 장소 이름을 눌러 해설을 확인하세요.
               </p>
             </div>

@@ -84,21 +84,21 @@ export default async function InvitePage({
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface py-8">
       <div className="w-full max-w-md rounded-lg bg-card p-8 shadow">
-        <p className="mb-2 text-xs text-gray-500">프로젝트 초대장</p>
-        <h1 className="mb-1 text-2xl font-bold text-gray-900">
+        <p className="mb-2 text-xs text-ink-muted">프로젝트 초대장</p>
+        <h1 className="mb-1 text-2xl font-bold text-ink">
           {invitation.project.title}
         </h1>
-        <p className="mb-4 text-sm text-gray-600">
+        <p className="mb-4 text-sm text-ink-muted">
           {invitation.project.organizer.name} 님이 초대했어요
         </p>
 
         {invitation.project.description && (
-          <p className="mb-4 text-sm text-gray-700">
+          <p className="mb-4 text-sm text-ink-muted">
             {invitation.project.description}
           </p>
         )}
 
-        <div className="mb-6 grid grid-cols-2 gap-2 text-xs text-gray-600">
+        <div className="mb-6 grid grid-cols-2 gap-2 text-xs text-ink-muted">
           <div className="rounded bg-panel p-2">
             장소 {invitation.project._count.sites}곳
           </div>
@@ -107,7 +107,7 @@ export default async function InvitePage({
           </div>
         </div>
 
-        <div className="mb-4 rounded bg-blue-50 p-3 text-xs text-blue-900">
+        <div className="mb-4 rounded border border-border bg-panel p-3 text-xs text-ink-muted">
           이 초대는 <strong>{invitation.email}</strong> 계정으로만
           수락할 수 있어요.
         </div>
@@ -137,14 +137,14 @@ export default async function InvitePage({
             </Link>
             <Link
               href={`/sign-in?invite=${token}`}
-              className="block rounded border py-2 text-center text-sm text-gray-800"
+              className="block rounded border border-secondary bg-secondary-tint py-2 text-center text-sm text-secondary-ink hover:bg-secondary-tint-strong"
             >
               이미 계정이 있어요
             </Link>
           </div>
         ) : !emailMatches ? (
           <div className="space-y-2">
-            <div className="rounded bg-yellow-50 p-3 text-sm text-yellow-800">
+            <div className="rounded border border-warning-border bg-warning-tint p-3 text-sm text-warning-ink">
               현재 <strong>{session.user.email}</strong> 계정으로 로그인
               중이에요.
               <br />
@@ -152,7 +152,7 @@ export default async function InvitePage({
             </div>
             <Link
               href={`/sign-in?invite=${token}`}
-              className="block rounded border py-2 text-center text-sm text-gray-800"
+              className="block rounded border border-secondary bg-secondary-tint py-2 text-center text-sm text-secondary-ink hover:bg-secondary-tint-strong"
             >
               다른 계정으로 로그인
             </Link>
@@ -176,8 +176,8 @@ function InvalidInvite({
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface">
       <div className="max-w-md rounded-lg bg-card p-8 shadow">
-        <h1 className="mb-4 text-xl font-bold text-gray-900">프로젝트 초대장</h1>
-        <p className="mb-4 text-sm text-gray-700">{message}</p>
+        <h1 className="mb-4 text-xl font-bold text-ink">프로젝트 초대장</h1>
+        <p className="mb-4 text-sm text-ink-muted">{message}</p>
         {primaryAction && (
           <Link
             href={primaryAction.href}

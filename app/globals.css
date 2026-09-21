@@ -23,6 +23,7 @@
 @theme {
   --color-ink: #2e2a14;           /* 기본 텍스트 */
   --color-ink-muted: #6b6449;     /* 보조 텍스트 */
+  --color-ink-faint: #9c957a;     /* 3순위 참고 정보용 — 클릭 가능한 요소엔 쓰지 말 것 */
 
   /*
    * 표면 위계 — 밝기 순서: panel < surface < card
@@ -45,12 +46,30 @@
   --color-secondary-tint-strong: #e2ecc4; /* hover 배경 */
   --color-secondary-ink: #3f5a0c;         /* 글씨 */
 
+  /* 경고(호박색) — accent 노랑과 섞지 말 것. 경고 박스 전용 조합 */
+  --color-warning-tint: #fbebd3;   /* 배경 */
+  --color-warning-border: #efc98e; /* 테두리 */
+  --color-warning-ink: #7a4410;    /* 글씨 */
+
   --color-link: #4a7c0f;          /* 링크 */
 }
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+/*
+ * 지도 전용 예외 — 지도 타일 위 가독성과 사용자 관습을 위한 팔레트 예외.
+ * UI 표면에 사용 금지.
+ * Tailwind 유틸리티를 만들지 않기 위해 의도적으로 @theme 밖(일반 :root)에 둔다.
+ * (클래스로 안 쓰이고 JS(getComputedStyle)/마커 var()에서만 읽히는 값이라,
+ *  @theme에 두면 향후 Tailwind가 미사용 토큰을 프루닝할 경우 빈 값이 될 위험이 있다.)
+ */
+:root {
+  --color-map-me: #2563eb;    /* 내 위치 점 — 지도 앱 공통 관습 */
+  --color-map-pin: #ef4444;   /* 미등록 핀 — 지도 타일에 없는 색이라 가장 잘 보임 */
+  --color-map-route: #02bd00; /* 활성 경로선 — 어린 벼 색, 지도 위 선명도 */
 }
 
 body {

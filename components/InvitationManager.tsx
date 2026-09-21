@@ -97,13 +97,13 @@ export default function InvitationManager({
 
   return (
     <div className="rounded-lg bg-card p-6 shadow">
-      <h2 className="mb-4 text-lg font-semibold text-gray-900">
+      <h2 className="mb-4 text-lg font-semibold text-ink">
         참여자 초대
       </h2>
 
       {/* 초대 이메일 입력 폼 */}
       <form onSubmit={handleInvite} className="mb-6 space-y-2">
-        <label className="block text-sm font-medium text-gray-900">
+        <label className="block text-sm font-medium text-ink">
           이메일 (쉼표 또는 줄바꿈으로 여러 명)
         </label>
         <textarea
@@ -111,10 +111,10 @@ export default function InvitationManager({
           onChange={(e) => setEmailsText(e.target.value)}
           rows={3}
           placeholder={"student1@example.com \n student2@example.com, student3@example.com"}
-          className="w-full rounded border px-3 py-2 text-sm text-gray-900"
+          className="w-full rounded border px-3 py-2 text-sm text-ink"
         />
         <div className="flex items-center justify-between">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-ink-muted">
             초대 링크는 14일간 유효합니다.
           </p>
           <button
@@ -140,11 +140,11 @@ export default function InvitationManager({
 
       {/* 대기 중인 초대 */}
       <div className="mb-6">
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">
+        <h3 className="mb-2 text-sm font-semibold text-ink-muted">
           발급된 초대 ({pendingInvitations.length})
         </h3>
         {pendingInvitations.length === 0 ? (
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-ink-muted">
             아직 발급된 초대가 없어요.
           </p>
         ) : (
@@ -158,15 +158,15 @@ export default function InvitationManager({
                   className="flex items-center gap-2 rounded border p-3"
                 >
                   <div className="flex-1">
-                    <p className="text-sm text-gray-900">{inv.email}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-sm text-ink">{inv.email}</p>
+                    <p className="text-xs text-ink-muted">
                       {inv.daysLeft > 0 ? `${inv.daysLeft}일 남음` : "만료됨"}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleCopy(inv.token)}
-                    className="rounded border px-2 py-1 text-xs text-gray-700"
+                    className="rounded border px-2 py-1 text-xs text-ink-muted"
                   >
                     {isCopied ? "복사됨" : "링크 복사"}
                   </button>
@@ -187,11 +187,11 @@ export default function InvitationManager({
 
       {/* 참가 완료 멤버 */}
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">
+        <h3 className="mb-2 text-sm font-semibold text-ink-muted">
           참가 중인 참여자 ({members.length})
         </h3>
         {members.length === 0 ? (
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-ink-muted">
             아직 참가한 참여자가 없어요.
           </p>
         ) : (
@@ -199,12 +199,12 @@ export default function InvitationManager({
             {members.map((m) => (
               <li
                 key={m.id}
-                className="flex items-center gap-2 rounded border border-gray-200 p-2 text-sm"
+                className="flex items-center gap-2 rounded border border-border p-2 text-sm"
               >
-                <span className="font-medium text-gray-900">
+                <span className="font-medium text-ink">
                   {m.user.name}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-ink-muted">
                   {m.user.email}
                 </span>
               </li>

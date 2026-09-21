@@ -89,9 +89,9 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
       {/* 위치 정보 - 항상 표시 */}
       <div className="mb-4 border-b pb-4">
         {site.address && (
-          <p className="text-sm text-gray-600">{site.address}</p>
+          <p className="text-sm text-ink-muted">{site.address}</p>
         )}
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-ink-faint">
           위도 {site.latitude.toFixed(6)} · 경도 {site.longitude.toFixed(6)}
         </p>
       </div>
@@ -100,12 +100,12 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
       {!isEditing && (
         <>
           <div className="mb-4 flex items-start justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">{site.name}</h1>
+            <h1 className="text-2xl font-bold text-ink">{site.name}</h1>
             {canEdit && (
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="rounded border px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+                className="rounded border px-3 py-1 text-sm text-ink-muted hover:bg-panel"
               >
                 해설 편집
               </button>
@@ -113,13 +113,13 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
           </div>
 
           {site.description ? (
-            <div className="prose prose-sm max-w-none text-gray-900 [&_img]:max-w-full [&_img]:h-auto">
+            <div className="prose prose-sm max-w-none text-ink [&_img]:max-w-full [&_img]:h-auto">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {site.description}
               </ReactMarkdown>
             </div>
           ) : (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-ink-muted">
               {canEdit
                 ? "아직 해설이 없어요. '해설 편집'을 눌러 작성해보세요."
                 : "아직 해설이 없어요."}
@@ -132,7 +132,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
       {isEditing && (
         <>
           <div className="mb-4">
-            <label className="mb-1 block text-sm font-medium text-gray-900">
+            <label className="mb-1 block text-sm font-medium text-ink">
               장소 이름 <span className="text-red-500">*</span>
             </label>
             <input
@@ -140,13 +140,13 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={100}
-              className="w-full rounded border px-3 py-2 text-gray-900"
+              className="w-full rounded border px-3 py-2 text-ink"
             />
           </div>
 
           <div className="mb-4">
             {/* 1층: 해설 label 단독 (문법 예시는 placeholder에 있으므로 생략) */}
-            <label className="mb-1 block text-sm font-medium text-gray-900">
+            <label className="mb-1 block text-sm font-medium text-ink">
               해설
             </label>
 
@@ -157,8 +157,8 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
                 onClick={() => setActiveTab("edit")}
                 className={`whitespace-nowrap rounded px-2 py-1 ${
                   activeTab === "edit"
-                    ? "bg-gray-900 text-white"
-                    : "border text-gray-700"
+                    ? "border border-secondary bg-secondary-tint text-secondary-ink hover:bg-secondary-tint-strong"
+                    : "border text-ink-muted"
                 }`}
               >
                 편집
@@ -168,8 +168,8 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
                 onClick={() => setActiveTab("preview")}
                 className={`whitespace-nowrap rounded px-2 py-1 ${
                   activeTab === "preview"
-                    ? "bg-gray-900 text-white"
-                    : "border text-gray-700"
+                    ? "border border-secondary bg-secondary-tint text-secondary-ink hover:bg-secondary-tint-strong"
+                    : "border text-ink-muted"
                 }`}
               >
                 미리보기
@@ -186,21 +186,21 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
                   disabled={isPending}
                 />
                 {/* 오른쪽 여백에 마크다운 작성 요령. 좁으면 버튼 아래로 wrap */}
-                <div className="ml-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-gray-400">
+                <div className="ml-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-ink-faint">
                   <span>마크다운:</span>
-                  <code className="whitespace-nowrap rounded bg-gray-100 px-1 text-gray-600">
+                  <code className="whitespace-nowrap rounded bg-panel px-1 text-ink-muted">
                     **굵게**
                   </code>
-                  <code className="whitespace-nowrap rounded bg-gray-100 px-1 text-gray-600">
+                  <code className="whitespace-nowrap rounded bg-panel px-1 text-ink-muted">
                     *기울임*
                   </code>
-                  <code className="whitespace-nowrap rounded bg-gray-100 px-1 text-gray-600">
+                  <code className="whitespace-nowrap rounded bg-panel px-1 text-ink-muted">
                     # 제목
                   </code>
-                  <code className="whitespace-nowrap rounded bg-gray-100 px-1 text-gray-600">
+                  <code className="whitespace-nowrap rounded bg-panel px-1 text-ink-muted">
                     - 목록
                   </code>
-                  <code className="whitespace-nowrap rounded bg-gray-100 px-1 text-gray-600">
+                  <code className="whitespace-nowrap rounded bg-panel px-1 text-ink-muted">
                     [링크](url)
                   </code>
                 </div>
@@ -223,25 +223,25 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
 | 연대 | 사건 |
 | --- | --- |
 | 1395 | 경복궁 창건 |`}
-                className="w-full rounded border px-3 py-2 font-mono text-sm text-gray-900"
+                className="w-full rounded border px-3 py-2 font-mono text-sm text-ink"
               />
             ) : (
               <div className="min-h-[400px] rounded border bg-panel p-4">
                 {description ? (
-                  <div className="prose prose-sm max-w-none text-gray-900 [&_img]:max-w-full [&_img]:h-auto">
+                  <div className="prose prose-sm max-w-none text-ink [&_img]:max-w-full [&_img]:h-auto">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {description}
                     </ReactMarkdown>
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-ink-faint">
                     미리볼 내용이 없어요
                   </p>
                 )}
               </div>
             )}
 
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-ink-muted">
               {description.length} / 10000
             </p>
           </div>
@@ -257,7 +257,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
               type="button"
               onClick={handleCancel}
               disabled={isPending}
-              className="rounded border px-4 py-2 text-sm text-gray-700 disabled:opacity-50"
+              className="rounded border px-4 py-2 text-sm text-ink-muted disabled:opacity-50"
             >
               취소
             </button>
