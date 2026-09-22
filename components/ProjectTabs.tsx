@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SiteList from "./SiteList";
 import ScheduleSection from "./ScheduleSection";
 import RouteView from "./RouteView";
@@ -115,6 +115,35 @@ export default function ProjectTabs({
       ? activeDate
       : dateKeys[0] ?? null;
 
+  // 날짜 탭 가로 스크롤: 양끝 페이드 표시 여부 + 선택 탭 자동 노출
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const activeTabRef = useRef<HTMLButtonElement>(null);
+  const [showLeftFade, setShowLeftFade] = useState(false);
+  const [showRightFade, setShowRightFade] = useState(false);
+
+  const updateFades = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setShowLeftFade(scrollLeft > 1);
+    setShowRightFade(scrollLeft + clientWidth < scrollWidth - 1);
+  }, []);
+
+  // 마운트/영역 크기 변화/날짜 목록 변화 시 페이드 갱신
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateFades();
+    const ro = new ResizeObserver(updateFades);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [updateFades, dateKeys]);
+
+  // 선택된 날짜 탭이 화면 밖이면 가로로만 스크롤해서 보이게 (첫 진입 시 오늘 탭 포함)
+  useEffect(() => {
+    activeTabRef.current?.scrollIntoView({ inline: "nearest", block: "nearest" });
+  }, [effectiveDate]);
+
   // 날짜 탭 클릭: 날짜 모드로. 날짜가 실제로 바뀔 때만 하위 탭을 동선으로 리셋한다.
   // (장소 탭 갔다가 같은 날짜로 돌아오면 보던 하위 탭을 그대로 유지)
   function selectDate(dateKey: string) {
@@ -143,27 +172,41 @@ export default function ProjectTabs({
     <div className="mb-6 rounded-lg bg-card shadow">
       {/* 상단 탭 바: 왼쪽 날짜(가로 스크롤) / 오른쪽 장소(고정) — 서로 다른 축 */}
       <div className="flex items-stretch border-b border-border">
-        <div className="flex-1 overflow-x-auto">
-          <div className="flex">
-            {dateKeys.length === 0 ? (
-              <span className="whitespace-nowrap px-4 py-3 text-base font-semibold text-ink-faint">
-                날짜 없음
-              </span>
-            ) : (
-              dateKeys.map((dateKey) => (
-                <button
-                  key={dateKey}
-                  type="button"
-                  onClick={() => selectDate(dateKey)}
-                  className={topTabClass(
-                    topTab === "date" && dateKey === effectiveDate
-                  )}
-                >
-                  {formatDateLabel(dateKey)}
-                </button>
-              ))
-            )}
+        <div className="relative min-w-0 flex-1">
+          <div
+            ref={scrollRef}
+            onScroll={updateFades}
+            className="overflow-x-auto"
+          >
+            <div className="flex">
+              {dateKeys.length === 0 ? (
+                <span className="whitespace-nowrap px-4 py-3 text-base font-semibold text-ink-faint">
+                  날짜 없음
+                </span>
+              ) : (
+                dateKeys.map((dateKey) => (
+                  <button
+                    key={dateKey}
+                    ref={dateKey === effectiveDate ? activeTabRef : null}
+                    type="button"
+                    onClick={() => selectDate(dateKey)}
+                    className={topTabClass(
+                      topTab === "date" && dateKey === effectiveDate
+                    )}
+                  >
+                    {formatDateLabel(dateKey)}
+                  </button>
+                ))
+              )}
+            </div>
           </div>
+          {/* 스크롤 끝에 더 볼 탭이 있을 때만 페이드 (클릭 방해 금지) */}
+          {showLeftFade && (
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-ink/20 to-transparent" />
+          )}
+          {showRightFade && (
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-ink/20 to-transparent" />
+          )}
         </div>
 
         {/* 구분선(border-l) + 스크롤 영역 밖 고정 */}
