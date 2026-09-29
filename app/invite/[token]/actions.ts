@@ -45,6 +45,18 @@ export async function acceptInvitation(input: { token: string }) {
     };
   }
 
+  // 역할 일치 검사: 계정 역할과 초대 역할이 같아야 수락 가능.
+  // (이미 멤버인 경우에도 이 검증을 먼저 통과해야 한다)
+  if (session.user.role !== invitation.role) {
+    const roleLabel = (r: string) =>
+      r === "ORGANIZER" ? "주최자" : r === "ADMIN" ? "관리자" : "참여자";
+    return {
+      error: `이 초대는 ${roleLabel(invitation.role)} 계정으로만 수락할 수 있어요. ${roleLabel(
+        session.user.role
+      )} 계정을 삭제하고 ${roleLabel(invitation.role)}로 다시 가입해야 합니다.`,
+    };
+  }
+
   // 이미 참가 중인지 확인
   const existing = await prisma.projectMember.findUnique({
     where: {
@@ -70,6 +82,7 @@ export async function acceptInvitation(input: { token: string }) {
       data: {
         projectId: invitation.projectId,
         userId: session.user.id,
+        role: invitation.role,
       },
     }),
     prisma.invitation.update({

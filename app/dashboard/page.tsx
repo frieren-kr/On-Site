@@ -22,7 +22,9 @@ export default async function DashboardPage({
   const projects =
     session.user.role === "ORGANIZER"
       ? await prisma.project.findMany({
-          where: { organizerId: session.user.id },
+          where: {
+            members: { some: { userId: session.user.id, role: "ORGANIZER" } },
+          },
           orderBy: { createdAt: "desc" },
           include: {
             _count: {

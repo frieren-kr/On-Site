@@ -386,6 +386,7 @@ export async function deleteSchedule(input: {
 
 export async function createInvitations(input: {
   projectId: string;
+  role: "ORGANIZER" | "PARTICIPANT";
   emails: string[];
 }) {
   const session = await requireAuth();
@@ -401,6 +402,7 @@ export async function createInvitations(input: {
 
   const parsed = createInvitationsSchema.safeParse({
     projectId: input.projectId,
+    role: input.role,
     emails: normalizedEmails,
   });
   if (!parsed.success) {
@@ -451,6 +453,7 @@ export async function createInvitations(input: {
     data: toInvite.map((email) => ({
       projectId: input.projectId,
       email,
+      role: input.role,
       expiresAt,
     })),
   });

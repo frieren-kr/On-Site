@@ -145,6 +145,7 @@ enum InvitationStatus {
 model Invitation {
   id        String           @id @default(cuid())
   email     String
+  role      Role             @default(PARTICIPANT)
   token     String           @unique @default(cuid())
   status    InvitationStatus @default(PENDING)
   createdAt DateTime         @default(now())

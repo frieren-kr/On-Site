@@ -61,6 +61,7 @@ export const updateScheduleSchema = z.object({
 
 export const createInvitationsSchema = z.object({
   projectId: z.string().min(1),
+  role: z.enum(["ORGANIZER", "PARTICIPANT"]),
   emails: z
     .array(z.string().email("이메일 형식이 잘못됐어요"))
     .min(1, "이메일을 한 개 이상 입력하세요")

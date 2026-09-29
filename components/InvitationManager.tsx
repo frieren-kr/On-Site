@@ -1,14 +1,19 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import type { Role } from "@prisma/client";
 import {
   createInvitations,
   cancelInvitation,
 } from "@/app/projects/[id]/actions";
 
+// 초대로 발송할 수 있는 역할 (계정 전용 ADMIN 제외)
+type InviteRole = "ORGANIZER" | "PARTICIPANT";
+
 interface Invitation {
   id: string;
   email: string;
+  role: Role;
   token: string;
   status: "PENDING" | "ACCEPTED" | "EXPIRED";
   createdAt: Date;
@@ -21,16 +26,26 @@ interface InvitationManagerProps {
   invitations: Invitation[];
   members: Array<{
     id: string;
+    role: Role;
     joinedAt: Date;
     user: { name: string; email: string };
   }>;
 }
+
+const roleLabel = (role: Role) => (role === "ORGANIZER" ? "주최자" : "참여자");
+
+// 주최자 = 선택/긍정 상태 계열(secondary), 참여자 = 중립 정보 박스
+const roleBadgeClass = (role: Role) =>
+  role === "ORGANIZER"
+    ? "border border-secondary bg-secondary-tint text-secondary-ink"
+    : "border border-border bg-panel text-ink-muted";
 
 export default function InvitationManager({
   projectId,
   invitations,
   members,
 }: InvitationManagerProps) {
+  const [inviteRole, setInviteRole] = useState<InviteRole>("PARTICIPANT");
   const [emailsText, setEmailsText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -59,6 +74,7 @@ export default function InvitationManager({
     startTransition(async () => {
       const result = await createInvitations({
         projectId,
+        role: inviteRole,
         emails,
       });
 
@@ -95,11 +111,41 @@ export default function InvitationManager({
 
   const pendingInvitations = invitations.filter((i) => i.status === "PENDING");
 
+  // ProjectTabs 하위 탭과 동일한 스타일 언어 (작은 탭 + 활성 밑줄 accent)
+  const tabClass = (active: boolean) =>
+    `border-b-2 py-2 text-sm ${
+      active
+        ? "border-accent font-medium text-ink"
+        : "border-transparent text-ink-muted hover:text-ink-muted"
+    }`;
+
   return (
     <div className="rounded-lg bg-card p-6 shadow">
-      <h2 className="mb-4 text-lg font-semibold text-ink">
-        참여자 초대
-      </h2>
+      <h2 className="mb-4 text-lg font-semibold text-ink">멤버 초대</h2>
+
+      {/* 역할 선택 탭 — 선택에 따라 초대 role 이 달라진다 */}
+      <div className="mb-3 flex gap-4 border-b border-border">
+        <button
+          type="button"
+          onClick={() => setInviteRole("PARTICIPANT")}
+          className={tabClass(inviteRole === "PARTICIPANT")}
+        >
+          참여자 초대
+        </button>
+        <button
+          type="button"
+          onClick={() => setInviteRole("ORGANIZER")}
+          className={tabClass(inviteRole === "ORGANIZER")}
+        >
+          주최자 초대
+        </button>
+      </div>
+
+      {inviteRole === "ORGANIZER" && (
+        <p className="mb-3 text-xs text-ink-muted">
+          주최자 계정으로 가입한 사람만 수락할 수 있어요.
+        </p>
+      )}
 
       {/* 초대 이메일 입력 폼 */}
       <form onSubmit={handleInvite} className="mb-6 space-y-2">
@@ -158,7 +204,16 @@ export default function InvitationManager({
                   className="flex items-center gap-2 rounded border p-3"
                 >
                   <div className="flex-1">
-                    <p className="text-sm text-ink">{inv.email}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-ink">{inv.email}</p>
+                      <span
+                        className={`rounded px-1.5 py-0.5 text-xs ${roleBadgeClass(
+                          inv.role
+                        )}`}
+                      >
+                        {roleLabel(inv.role)}
+                      </span>
+                    </div>
                     <p className="text-xs text-ink-muted">
                       {inv.daysLeft > 0 ? `${inv.daysLeft}일 남음` : "만료됨"}
                     </p>
@@ -188,11 +243,11 @@ export default function InvitationManager({
       {/* 참가 완료 멤버 */}
       <div>
         <h3 className="mb-2 text-sm font-semibold text-ink-muted">
-          참가 중인 참여자 ({members.length})
+          참가 중인 멤버 ({members.length})
         </h3>
         {members.length === 0 ? (
           <p className="text-xs text-ink-muted">
-            아직 참가한 참여자가 없어요.
+            아직 참가한 멤버가 없어요.
           </p>
         ) : (
           <ul className="space-y-1">
@@ -206,6 +261,13 @@ export default function InvitationManager({
                 </span>
                 <span className="text-xs text-ink-muted">
                   {m.user.email}
+                </span>
+                <span
+                  className={`ml-auto rounded px-1.5 py-0.5 text-xs ${roleBadgeClass(
+                    m.role
+                  )}`}
+                >
+                  {roleLabel(m.role)}
                 </span>
               </li>
             ))}
