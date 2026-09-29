@@ -27,10 +27,28 @@ export async function getDeletionImpact(userId: string) {
     0
   );
 
+  // 탈퇴를 막는 프로젝트: 삭제해도 살아남는(내가 만든 게 아닌) 프로젝트 중 내가 유일한 주최자인 것.
+  // lib/auth.ts 의 beforeDelete 훅과 동일한 판정. 화면에서 미리 경고/차단하기 위해 목록을 반환한다.
+  const soleOrganizerProjects = await prisma.project.findMany({
+    where: {
+      organizerId: { not: userId },
+      members: { some: { userId, role: "ORGANIZER" } },
+    },
+    select: {
+      id: true,
+      title: true,
+      members: { where: { role: "ORGANIZER" }, select: { id: true } },
+    },
+  });
+  const blockingProjects = soleOrganizerProjects
+    .filter((p) => p.members.length === 1)
+    .map((p) => ({ id: p.id, title: p.title }));
+
   return {
     ownedProjects,
     ownedProjectCount: ownedProjects.length,
     joinedCount,
     affectedMembers,
+    blockingProjects,
   };
 }

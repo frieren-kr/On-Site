@@ -71,6 +71,7 @@ export default async function SettingsPage() {
                   title: p.title,
                   memberCount: p._count.members,
                 })),
+                blockingProjects: impact.blockingProjects,
               }}
             />
           </div>

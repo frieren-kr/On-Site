@@ -12,6 +12,8 @@ interface DeleteImpact {
     title: string;
     memberCount: number;
   }>;
+  // 이 유저가 유일한 주최자라 탈퇴를 막는 프로젝트들 (있으면 탈퇴 불가)
+  blockingProjects: Array<{ id: string; title: string }>;
 }
 
 export default function DeleteAccountSection({
@@ -25,6 +27,25 @@ export default function DeleteAccountSection({
   const [isPending, startTransition] = useTransition();
 
   const hasImpact = impact.ownedProjectCount > 0;
+  const blocked = impact.blockingProjects.length > 0;
+
+  // 유일한 주최자라 탈퇴가 막히는 경우의 경고 (초기/확인 화면 공통)
+  const blockingNotice = (
+    <div className="rounded border border-warning-border bg-warning-tint p-4 text-sm text-warning-ink">
+      <p className="mb-2 font-semibold">
+        아직 탈퇴할 수 없어요. 다음 프로젝트의 유일한 주최자예요:
+      </p>
+      <ul className="mb-2 space-y-1">
+        {impact.blockingProjects.map((p) => (
+          <li key={p.id}>• {p.title}</li>
+        ))}
+      </ul>
+      <p>
+        다른 사람을 주최자로 초대하거나 해당 프로젝트를 삭제해 먼저 정리한 뒤 다시
+        시도하세요.
+      </p>
+    </div>
+  );
 
   function handleDelete() {
     setError(null);
@@ -43,14 +64,16 @@ export default function DeleteAccountSection({
 
   if (!showConfirm) {
     return (
-      <div>
-        <p className="mb-4 text-sm text-ink-muted">
+      <div className="space-y-4">
+        {blocked && blockingNotice}
+        <p className="text-sm text-ink-muted">
           탈퇴하면 계정과 관련된 모든 데이터가 삭제되며 복구할 수 없어요.
         </p>
         <button
           type="button"
           onClick={() => setShowConfirm(true)}
-          className="rounded border border-red-300 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+          disabled={blocked}
+          className="rounded border border-red-300 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           회원 탈퇴 진행
         </button>
@@ -136,7 +159,7 @@ export default function DeleteAccountSection({
         <button
           type="button"
           onClick={handleDelete}
-          disabled={isPending || confirmText !== "탈퇴합니다"}
+          disabled={isPending || blocked || confirmText !== "탈퇴합니다"}
           className="rounded bg-red-600 px-4 py-2 text-sm text-white disabled:opacity-50"
         >
           {isPending ? "탈퇴 처리 중..." : "영구 탈퇴"}
