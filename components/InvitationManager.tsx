@@ -5,6 +5,7 @@ import type { Role } from "@prisma/client";
 import {
   createInvitations,
   cancelInvitation,
+  removeMember,
 } from "@/app/projects/[id]/actions";
 
 // 초대로 발송할 수 있는 역할 (계정 전용 ADMIN 제외)
@@ -23,9 +24,11 @@ interface Invitation {
 
 interface InvitationManagerProps {
   projectId: string;
+  currentUserId: string;
   invitations: Invitation[];
   members: Array<{
     id: string;
+    userId: string;
     role: Role;
     joinedAt: Date;
     user: { name: string; email: string };
@@ -42,6 +45,7 @@ const roleBadgeClass = (role: Role) =>
 
 export default function InvitationManager({
   projectId,
+  currentUserId,
   invitations,
   members,
 }: InvitationManagerProps) {
@@ -105,6 +109,21 @@ export default function InvitationManager({
     setNotice(null);
     startTransition(async () => {
       const result = await cancelInvitation({ invitationId, projectId });
+      if (result.error) setError(result.error);
+    });
+  }
+
+  function handleRemove(memberId: string, name: string) {
+    if (
+      !confirm(
+        `${name}님을 내보낼까요? 내보내면 제외되고 다시 초대해야 참여할 수 있어요.`
+      )
+    )
+      return;
+    setError(null);
+    setNotice(null);
+    startTransition(async () => {
+      const result = await removeMember({ memberId, projectId });
       if (result.error) setError(result.error);
     });
   }
@@ -269,6 +288,16 @@ export default function InvitationManager({
                 >
                   {roleLabel(m.role)}
                 </span>
+                {m.userId !== currentUserId && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(m.id, m.user.name)}
+                    disabled={isPending}
+                    className="rounded border border-warning-border px-2 py-1 text-xs text-warning-ink hover:bg-warning-tint disabled:opacity-30"
+                  >
+                    내보내기
+                  </button>
+                )}
               </li>
             ))}
           </ul>

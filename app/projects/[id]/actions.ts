@@ -499,6 +499,65 @@ export async function cancelInvitation(input: {
   return { success: true };
 }
 
+export async function removeMember(input: {
+  memberId: string;
+  projectId: string;
+}) {
+  const session = await requireAuth();
+
+  // 권한 - 이 프로젝트의 주최자만 멤버를 내보낼 수 있음
+  const isOwner = await isProjectOrganizer(session.user.id, input.projectId);
+  if (!isOwner) {
+    return { error: "권한이 없어요" };
+  }
+
+  // IDOR 방어 - 이 멤버가 진짜 이 프로젝트 소속인지
+  const member = await prisma.projectMember.findUnique({
+    where: { id: input.memberId },
+    include: { user: { select: { email: true } } },
+  });
+  if (!member || member.projectId !== input.projectId) {
+    return { error: "멤버를 찾을 수 없어요" };
+  }
+
+  // 본인 방어 - 자기 자신은 내보낼 수 없음
+  if (member.userId === session.user.id) {
+    return { error: "자기 자신은 내보낼 수 없어요" };
+  }
+
+  // 마지막 주최자 방어 - 대상이 주최자면, 이 프로젝트에 주최자가 그 한 명뿐일 때 거부
+  if (member.role === "ORGANIZER") {
+    const organizerCount = await prisma.projectMember.count({
+      where: { projectId: input.projectId, role: "ORGANIZER" },
+    });
+    if (organizerCount <= 1) {
+      return {
+        error:
+          "마지막 주최자는 내보낼 수 없어요. 다른 사람을 주최자로 초대한 뒤 다시 시도하세요.",
+      };
+    }
+  }
+
+  // 멤버 삭제 + 그 이메일로 남아 있던 PENDING 초대 정리를 한 트랜잭션으로 묶어 원자성 보장
+  await prisma.$transaction([
+    prisma.projectMember.delete({
+      where: { id: input.memberId },
+    }),
+    prisma.invitation.deleteMany({
+      where: {
+        projectId: input.projectId,
+        // 초대는 소문자로 저장되지만 User.email 은 대소문자 보장이 없어
+        // insensitive 로 비교해야 대소문자 다른 PENDING 초대까지 지워져 재가입 구멍이 안 생긴다
+        email: { equals: member.user.email, mode: "insensitive" },
+        status: "PENDING",
+      },
+    }),
+  ]);
+
+  revalidatePath(`/projects/${input.projectId}`);
+  return { success: true };
+}
+
 export async function updateProjectRoute(input: { projectId: string }) {
   const session = await requireAuth();
 

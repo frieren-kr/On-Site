@@ -202,6 +202,7 @@ export default async function ProjectPage({
           <div className="mb-6">
             <InvitationManager
               projectId={project.id}
+              currentUserId={session.user.id}
               invitations={project.invitations.map((inv) => ({
                 ...inv,
                 daysLeft: Math.ceil(
