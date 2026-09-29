@@ -21,13 +21,13 @@ export async function canAccessProject(userId: string, projectId: string) {
 /**
  * 이 사용자가 이 프로젝트의 organizer인가?
  * 프로젝트 수정/삭제처럼 organizer만 할 수 있는 작업용
+ *
+ * 판정 기준은 project.organizerId(만든 사람)가 아니라
+ * ProjectMember.role === "ORGANIZER" 다. organizerId 는 '만든 사람' 표시용으로만 남는다.
  */
 export async function isProjectOrganizer(userId: string, projectId: string) {
-  const project = await prisma.project.findFirst({
-    where: {
-      id: projectId,
-      organizerId: userId,
-    },
+  const member = await prisma.projectMember.findUnique({
+    where: { projectId_userId: { projectId, userId } },
   });
-  return project !== null;
+  return member?.role === "ORGANIZER";
 }

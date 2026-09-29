@@ -156,6 +156,7 @@ model Invitation {
 
 model ProjectMember {
   id       String   @id @default(cuid())
+  role     Role     @default(PARTICIPANT)
   joinedAt DateTime @default(now())
 
   projectId String

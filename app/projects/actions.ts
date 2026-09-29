@@ -37,7 +37,9 @@ export async function createProject(
 
   const { title, description, startDate, endDate } = parsed.data;
 
-  // 4. DB에 저장
+  // 4. DB에 저장 — 만든 사람을 ORGANIZER 멤버로 함께 등록.
+  //    권한 판정이 ProjectMember.role 기반이므로, 멤버 행이 없으면
+  //    정작 주최자 본인이 자기 프로젝트를 편집하지 못한다. 한 create 안에서 원자적으로 생성.
   const project = await prisma.project.create({
     data: {
       title,
@@ -46,6 +48,12 @@ export async function createProject(
       endDate: endDate ? new Date(endDate) : null,
       organizerId: session.user.id,
       status: "DRAFT",
+      members: {
+        create: {
+          userId: session.user.id,
+          role: "ORGANIZER",
+        },
+      },
     },
   });
 
