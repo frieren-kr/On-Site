@@ -206,6 +206,7 @@ export default async function ProjectPage({
               invitations={project.invitations.map((inv) => ({
                 ...inv,
                 daysLeft: Math.ceil(
+                  // eslint-disable-next-line react-hooks/purity -- 서버 컴포넌트라 요청당 1회만 렌더되어 값이 흔들리지 않음
                   (new Date(inv.expiresAt).getTime() - Date.now()) /
                     (1000 * 60 * 60 * 24)
                 ),
