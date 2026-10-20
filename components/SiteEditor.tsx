@@ -7,6 +7,13 @@ import remarkGfm from "remark-gfm";
 import { updateSite } from "@/app/projects/[id]/actions";
 import ImageUploadButton from "@/components/ImageUploadButton";
 
+// 해설 마크다운 표시용 (조회 화면 + 편집 미리보기 공용 — 둘이 똑같이 보여야 함)
+// - text-[13px]: prose-sm(14px)보다 한 단계 작게. prose의 제목·여백은 em 단위라 같이 줄어든다
+// - break-keep: 한국어를 어절(띄어쓰기) 단위로 줄바꿈 (word-break: keep-all)
+// - wrap-break-word: 띄어쓰기 없는 긴 URL 등은 화면 밖으로 넘치지 않게 강제로 끊음
+const MARKDOWN_CLASS =
+  "prose prose-sm max-w-none text-[13px] break-keep wrap-break-word text-ink [&_img]:max-w-full [&_img]:h-auto";
+
 interface SiteEditorProps {
   site: {
     id: string;
@@ -113,7 +120,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
           </div>
 
           {site.description ? (
-            <div className="prose prose-sm max-w-none text-ink [&_img]:max-w-full [&_img]:h-auto">
+            <div className={MARKDOWN_CLASS}>
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {site.description}
               </ReactMarkdown>
@@ -228,7 +235,7 @@ export default function SiteEditor({ site, canEdit }: SiteEditorProps) {
             ) : (
               <div className="min-h-[400px] rounded border bg-panel p-4">
                 {description ? (
-                  <div className="prose prose-sm max-w-none text-ink [&_img]:max-w-full [&_img]:h-auto">
+                  <div className={MARKDOWN_CLASS}>
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {description}
                     </ReactMarkdown>
