@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError } from "better-auth/api";
+import { bearer } from "better-auth/plugins";
 import prisma from "./prisma";
 
 export const auth = betterAuth({
@@ -48,4 +49,7 @@ export const auth = betterAuth({
       },
     },
   },
+  // 안드로이드 앱용: Authorization: Bearer <token> 헤더를 세션 쿠키로 바꿔 처리한다.
+  // 헤더가 없는 웹 요청은 건드리지 않으므로 기존 쿠키 로그인은 그대로 동작한다.
+  plugins: [bearer()],
 });
