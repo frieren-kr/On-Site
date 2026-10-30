@@ -2,6 +2,7 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { getDeletionImpact } from "@/lib/account";
 import DeleteAccountSection from "@/components/DeleteAccountSection";
+import ChangePasswordSection from "@/components/ChangePasswordSection";
 import SignOutButton from "@/components/SignOutButton";
 import Link from "next/link";
 
@@ -43,6 +44,15 @@ export default async function SettingsPage() {
               </span>
             </div>
           </div>
+        </div>
+
+        {/* 비밀번호 변경 */}
+        <div className="mb-6 rounded-lg bg-card p-6 shadow">
+          <h2 className="mb-2 text-lg font-semibold text-ink">비밀번호 변경</h2>
+          <p className="mb-4 text-sm text-ink-muted">
+            변경하면 다른 기기에서는 모두 로그아웃돼요.
+          </p>
+          <ChangePasswordSection />
         </div>
 
         {/* 로그아웃 */}
