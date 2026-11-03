@@ -111,9 +111,14 @@ export async function calculateRoute(
   }
 
   //마지막 목적지 구간
+  // 경유지가 없으면 네이버 응답의 summary.goal에 distance/duration 자체가 없다
+  // (경유지가 있을 때만 "마지막 경유지 → 목적지" 구간 값이 들어온다).
+  // 이때는 전체 값에서 앞 구간 합을 뺀 나머지가 마지막 구간이다.
+  const prevDistance = legs.reduce((sum, l) => sum + l.distance, 0);
+  const prevDuration = legs.reduce((sum, l) => sum + l.duration, 0);
   legs.push({
-    distance: summary.goal.distance ?? 0,
-    duration: summary.goal.duration ?? 0,
+    distance: summary.goal.distance ?? summary.distance - prevDistance,
+    duration: summary.goal.duration ?? summary.duration - prevDuration,
   });
 
   return {
